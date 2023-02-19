@@ -6,20 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vertical Navbar - Mazer Admin Dashboard</title>
 
-    <link rel="stylesheet" href="{{asset('assets/css/main/app.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/css/main/app-dark.css')}}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/main/app.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/main/app-dark.css') }}" />
 
-    <link rel="shortcut icon" href="{{asset('assets/images/logo/favicon.svg')}}" type="image/x-icon" />
-    <link rel="shortcut icon" href="{{asset('assets/images/logo/favicon.png')}}" type="image/png" />
-    <link
-      rel="stylesheet"
-      href="{{asset('assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css')}}"
-    />
-    <link rel="stylesheet" href="{{asset('assets/css/pages/datatables.css')}}" />
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo/favicon.svg') }}"
+        type="image/x-icon" />
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo/favicon.png') }}"
+        type="image/png" />
+    <link rel="stylesheet"
+        href="{{ asset('assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/pages/datatables.css') }}" />
 </head>
 
 <body>
-    <script src="{{asset('assets/js/initTheme.js')}}"></script>
+    <script src="{{ asset('assets/js/initTheme.js') }}"></script>
     <div id="app">
         {{-- Sidebar Start --}}
         @include('layouts.sidebar')
@@ -66,13 +66,13 @@
             </div>
         </div>
     </div>
-    <script src="{{asset('assets/extensions/jquery/jquery.min.js')}}"></script>
+    <script src="{{ asset('assets/extensions/jquery/jquery.min.js') }}"></script>
     <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
-    <script src="{{asset('assets/js/pages/datatables.js')}}"></script>
-    
-    <script src="{{asset('assets/js/bootstrap.js')}}"></script>
-    <script src="{{asset('assets/js/app.js')}}"></script>
+    <script src="{{ asset('assets/js/pages/datatables.js') }}"></script>
 
+    <script src="{{ asset('assets/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('assets/js/app.js') }}"></script>
+    @include('layouts.sweetalert')
 </body>
 
 </html>
