@@ -44,7 +44,7 @@
                             <i class="bi bi-shield-lock"></i>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-5">
+                    <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-3">
                         Register
                     </button>
                 </form>

@@ -2,7 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\UserSettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,21 +23,35 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::middleware('revalidate')->group(function () {
-    Route::controller(AuthController::class)->group(function () {
-        Route::middleware('guest')->group(function () {
+    Route::middleware('guest')->group(function () {
+        Route::controller(LoginController::class)->group(function () {
             Route::get('/login', 'login')->name('login');
             Route::post('/authenticate', 'authenticate')->name('authenticate');
+        });
+        Route::controller(RegisterController::class)->group(function () {
             Route::get('/register', 'register')->name('register');
             Route::post('/registration', 'registration')->name('registration');
+        });
+        Route::controller(ForgotPasswordController::class)->group(function () {
             Route::get('/forgot-password', 'forgotPassword')->name('forgotPassword');
             Route::post('/forgotPasswordProcess', 'forgotPasswordProses')->name('forgotPasswordProses');
+        });
+        Route::controller(ResetPasswordController::class)->group(function () {
             Route::get('/reset-password/{token}', 'resetPassword')->name('resetPassword');
             Route::post('/reset-password', 'resetPasswordProcess')->name('resetPasswordProcess');
         });
-        Route::post('/logout', 'logout')->name('logout')->middleware('auth');
     });
-    
-    Route::controller(DashboardController::class)->group(function () {
-        Route::get('/dashboard', 'index')->name('dashboard')->middleware('auth');
+    Route::middleware('auth')->group(function () {
+        Route::controller(DashboardController::class)->group(function () {
+            Route::get('/dashboard', 'index')->name('dashboard');
+            Route::post('/logout', 'logout')->name('logout');
+        });
+        Route::controller(UserSettingsController::class)->group(function () {
+            Route::prefix('dashboard/user')->group(function () {
+                Route::name('dashboard.user.')->group(function () {
+                    Route::get('/settings', 'index')->name('settings');
+                });
+            });
+        });
     });
 });

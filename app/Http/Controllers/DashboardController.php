@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 
 class DashboardController extends Controller
 {
@@ -10,8 +11,20 @@ class DashboardController extends Controller
     {
         return view('dashboard.index');
     }
-    public function tes()
+
+    public function logout(Request $request)
     {
-        return view('dashboard.tes');
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+        $notification = [
+            'message' => 'Logout Berhasil',
+            'alert-type' => 'success',
+        ];
+        return redirect()
+            ->route('login')
+            ->with($notification);
     }
 }

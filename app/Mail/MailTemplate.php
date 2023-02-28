@@ -7,19 +7,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ChangePassword extends Mailable
+class MailTemplate extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $details;
+    protected $emails;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($details)
+    public function __construct($emails)
     {
-        $this->details = $details;
+        $this->emails = $emails;
     }
 
     /**
@@ -29,9 +29,9 @@ class ChangePassword extends Mailable
      */
     public function build()
     {
-        return $this->from('adminpmb@mail.com', 'Admin')
-                    ->subject($this->details['subject'])
-                    ->markdown('emails.change-password')
-                    ->with('details', $this->details);;
+        return $this->from('admin@mail.com', 'Admin')
+                    ->subject($this->emails['subject'])
+                    ->markdown('emails.email-template')
+                    ->with('emails', $this->emails);;
     }
 }

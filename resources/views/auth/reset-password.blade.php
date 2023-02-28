@@ -20,7 +20,7 @@
     <div class="row h-100">
         <div class="col-12">
             <div id="auth-left">
-                <h1 class="auth-title">New Password</h1>
+                <h1 class="auth-title mt-5">New Password</h1>
             <p class="auth-subtitle mb-5">
               Input your new password.
             </p>
