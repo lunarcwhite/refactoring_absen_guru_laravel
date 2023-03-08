@@ -1,69 +1,101 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vertical Navbar - Mazer Admin Dashboard</title>
-
-    <link rel="stylesheet" href="{{ asset('assets/css/main/app.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/css/pages/auth.css') }}" />
-
-    <link rel="shortcut icon" href="{{ asset('assets/images/logo/favicon.svg') }}"
-        type="image/x-icon" />
-    <link rel="shortcut icon" href="{{ asset('assets/images/logo/favicon.png') }}"
-        type="image/png" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <title>Mobilekit Mobile UI Kit</title>
+    <meta name="description" content="Mobilekit HTML Mobile UI Kit">
+    <meta name="keywords" content="bootstrap 4, mobile template, cordova, phonegap, mobile, html" />
+    <link rel="icon" type="image/png" href="{{asset('assets/img/favicon.png')}}" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('assets/img/icon/192x192.png')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+    <link rel="manifest" href="{{asset('__manifest.json')}}">
 </head>
 
-<body>
-    <div id="auth">
-        <div class="row h-100">
-            <div class="col-12">
-                <div id="auth-left">
-                    <h1 class="auth-title">Log in.</h1>
-                    <p class="auth-subtitle mb-3">
-                        Log in with your data that you entered during registration.
-                    </p>
-                    <form action="{{ route('authenticate') }}" method="post" id="authenticate">
-                        @csrf
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" class="form-control form-control-xl" placeholder="Username"
-                                name="username" />
-                            <div class="form-control-icon">
-                                <i class="bi bi-person"></i>
-                            </div>
+<body class="bg-white">
+
+    <!-- loader -->
+    <div id="loader">
+        <div class="spinner-border text-primary" role="status"></div>
+    </div>
+    <!-- * loader -->
+
+
+    <!-- App Capsule -->
+    <div id="appCapsule" class="pt-0">
+
+        <div class="login-form mt-1">
+            <div class="section">
+                <img src="{{asset('assets/img/sample/photo/vector4.png')}}" alt="image" class="form-image">
+            </div>
+            <div class="section mt-1">
+                <h1>Get started</h1>
+                <h4>Fill the form to log in</h4>
+            </div>
+            <div class="section mt-1 mb-5">
+                <form action="{{route('authenticate')}}" method="POST">
+                    @csrf
+                    <div class="form-group boxed">
+                        <div class="input-wrapper">
+                            <input type="text" name="username" class="form-control" id="email1" placeholder="Email address">
+                            <i class="clear-input">
+                                <ion-icon name="close-circle"></ion-icon>
+                            </i>
                         </div>
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="password" class="form-control form-control-xl" placeholder="Password"
-                                name="password" />
-                            <div class="form-control-icon">
-                                <i class="bi bi-shield-lock"></i>
-                            </div>
-                        </div>
-                        <div class="form-check form-check-lg d-flex align-items-end">
-                            <input class="form-check-input me-2" type="checkbox" value="" id="flexCheckDefault" />
-                            <label class="form-check-label text-gray-600" for="flexCheckDefault">
-                                Keep me logged in
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-5">
-                            Log in
-                        </button>
-                    </form>
-                    <div class="text-center mt-5 text-lg fs-4">
-                        <p class="text-gray-600">
-                            Don't have an account?
-                            <a href="{{ route('register') }}" class="font-bold">Sign up</a>.
-                        </p>
-                        <p>
-                            <a class="font-bold" href="{{route('forgotPassword')}}">Forgot password?</a>.
-                        </p>
                     </div>
-                </div>
+
+                    <div class="form-group boxed">
+                        <div class="input-wrapper">
+                            <input type="password" name="password" class="form-control" id="password1" placeholder="Password">
+                            <i class="clear-input">
+                                <ion-icon name="close-circle"></ion-icon>
+                            </i>
+                        </div>
+                    </div>
+
+                    <div class="form-links mt-2">
+                        {{-- <div>
+                            <a href="page-register.html">Register Now</a>
+                        </div> --}}
+                        <div><a href="{{route('forgotPassword')}}" class="text-muted">Forgot Password?</a></div>
+                    </div>
+
+                    <div class="form-button-group">
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">Log in</button>
+                    </div>
+
+                </form>
             </div>
         </div>
+
+
     </div>
-@include('layouts.sweetalert')
+    <!-- * App Capsule -->
+
+
+
+    <!-- ///////////// Js Files ////////////////////  -->
+    <!-- Jquery -->
+    <script src="{{('assets/js/lib/jquery-3.4.1.min.js')}}"></script>
+    <!-- Bootstrap-->
+    <script src="{{('assets/js/lib/popper.min.js')}}"></script>
+    <script src="{{('assets/js/lib/bootstrap.min.js')}}"></script>
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js')}}"></script>
+    <!-- Owl Carousel -->
+    <script src="{{('assets/js/plugins/owl-carousel/owl.carousel.min.js')}}"></script>
+    <!-- jQuery Circle Progress -->
+    <script src="{{('assets/js/plugins/jquery-circle-progress/circle-progress.min.js')}}"></script>
+    <!-- Base Js File -->
+    <script src="{{('assets/js/base.js')}}"></script>
+
+    @include('layouts.sweetalert')
+
 </body>
 
 </html>

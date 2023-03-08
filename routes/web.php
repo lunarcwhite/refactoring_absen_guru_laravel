@@ -7,6 +7,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\UserSettingsController;
+use App\Http\Controllers\PresensiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,14 +43,18 @@ Route::middleware('revalidate')->group(function () {
         });
     });
     Route::middleware('auth')->group(function () {
-        Route::controller(DashboardController::class)->group(function () {
-            Route::get('/dashboard', 'index')->name('dashboard');
-            Route::post('/logout', 'logout')->name('logout');
-        });
-        Route::controller(UserSettingsController::class)->group(function () {
-            Route::prefix('dashboard/user')->group(function () {
-                Route::name('dashboard.user.')->group(function () {
-                    Route::get('/settings', 'index')->name('settings');
+        Route::post('/logout', [DashboardController::class, 'logout'])->name('logout');
+        Route::prefix('dashboard')->group(function () {
+            Route::name('dashboard')->group(function () {
+                Route::controller(DashboardController::class)->group(function () {
+                    Route::get('/', 'index')->name('');
+                    Route::get('/user', 'indexUser')->name('.user');
+                });
+                Route::controller(PresensiController::class)->group(function () {
+                    Route::get('user/presensi', 'index')->name('.user.presensi');
+                });
+                Route::controller(UserSettingsController::class)->group(function () {
+                    Route::get('user/settings', 'index')->name('.user.settings');
                 });
             });
         });
