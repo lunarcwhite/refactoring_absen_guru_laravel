@@ -5,12 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Roles extends Model
+class Absensi extends Model
 {
     use HasFactory;
 
-    public function user()
-    {
-        return $this->hasMany(User::class, 'id', 'role_id');
-    }
+    protected $guarded = [];
 }

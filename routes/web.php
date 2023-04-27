@@ -2,12 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DashboardUserController;
+use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\UserSettingsController;
-use App\Http\Controllers\PresensiController;
+use App\Http\Controllers\UserPresensiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +25,7 @@ use App\Http\Controllers\PresensiController;
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::middleware('revalidate')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::controller(LoginController::class)->group(function () {
@@ -47,11 +50,23 @@ Route::middleware('revalidate')->group(function () {
         Route::prefix('dashboard')->group(function () {
             Route::name('dashboard')->group(function () {
                 Route::controller(DashboardController::class)->group(function () {
-                    Route::get('/', 'index')->name('');
-                    Route::get('/user', 'indexUser')->name('.user');
+                    Route::get('/', 'index');
                 });
-                Route::controller(PresensiController::class)->group(function () {
-                    Route::get('user/presensi', 'index')->name('.user.presensi');
+                Route::middleware('user')->group(function () {
+                    Route::controller(DashboardUserController::class)->group(function () {
+                        Route::get('/user', 'index')->name('.user');
+                    });
+                });
+                Route::middleware('admin')->group(function () {
+                    Route::controller(DashboardAdminController::class)->group(function () {
+                        Route::get('/admin', 'index')->name('.admin');
+                    });
+                });
+                Route::controller(UserPresensiController::class)->group(function () {
+                    Route::name('.user.presensi')->group(function () {
+                        Route::get('user/presensi', 'index')->name('');
+                        Route::post('user/presensi/absen', 'absen')->name('.absen');
+                    });
                 });
                 Route::controller(UserSettingsController::class)->group(function () {
                     Route::get('user/settings', 'index')->name('.user.settings');

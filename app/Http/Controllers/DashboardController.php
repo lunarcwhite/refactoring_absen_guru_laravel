@@ -11,13 +11,10 @@ class DashboardController extends Controller
     {
         if(Auth::user()->role_id == 2){
             return redirect()->route('dashboard.user');
+        }else{
+            return redirect()->route('dashboard.admin');
         }
     }
-    public function indexUser()
-    {
-        return view('dashboardUser.index');
-    }
-
     public function logout(Request $request)
     {
         Auth::logout();
