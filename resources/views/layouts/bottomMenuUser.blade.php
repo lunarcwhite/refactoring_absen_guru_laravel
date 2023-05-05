@@ -5,14 +5,14 @@
             <strong>Dashboard</strong>
         </div>
     </a>
-    <a href="#" class="item">
+    <a href="{{route('dashboard.rekapan')}}" class="item">
         <div class="col">
             <ion-icon name="calendar-outline" role="img" class="md hydrated"
                 aria-label="calendar outline"></ion-icon>
-            <strong>Calendar</strong>
+            <strong>Rekapan</strong>
         </div>
     </a>
-    <a href="{{route('dashboard.user.presensi')}}" class="item">
+    <a href="{{route('dashboard.presensi')}}" class="item">
         <div class="col">
             <ion-icon name="camera" role="img" class="md hydrated" aria-label="add outline"></ion-icon>
             <strong>Absen</strong>

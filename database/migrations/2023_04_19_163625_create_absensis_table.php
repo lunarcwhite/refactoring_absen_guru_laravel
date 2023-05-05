@@ -16,8 +16,9 @@ return new class extends Migration
             $table->bigInteger('user_id');
             $table->date('tgl_absensi');
             $table->char('absen_masuk', 255);
-            $table->char('absen_pulang', 255);
-            $table->char('lokasi', 50);
+            $table->char('absen_pulang', 255)->nullable();
+            $table->char('lokasi_absen_masuk', 50);
+            $table->char('lokasi_absen_pulang', 50);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')

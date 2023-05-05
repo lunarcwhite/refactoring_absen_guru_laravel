@@ -24,6 +24,13 @@
                     backgroundColor: "#c91a1a",
                 }).showToast()
               break;
+            default:
+            Swal.fire(
+                'Gagal',
+                "{{ Session::get('message') }}",
+                'error'
+            )
+                break;
         }
     @endif
     @if ($errors->any())

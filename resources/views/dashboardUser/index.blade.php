@@ -72,11 +72,18 @@
                         <div class="card-body">
                             <div class="presencecontent">
                                 <div class="iconpresence">
-                                    <ion-icon name="camera"></ion-icon>
+                                    @if ($absenHariIni !== null)
+                                    @php
+                                        $masuk = Storage::url('swafoto_absensi_masuk/'.$absenHariIni->created_at->format('Y-m-d').'/'.$absenHariIni->absen_masuk);
+                                    @endphp
+                                    <img src="{{url($masuk)}}" alt="" width="60px" height="40px">    
+                                    @else
+                                    <ion-icon name="camera"></ion-icon>    
+                                    @endif
                                 </div>
                                 <div class="presencedetail">
                                     <h4 class="presencetitle">Masuk</h4>
-                                    <span>07:00</span>
+                                    <span>{{$absenHariIni !== null ? $absenHariIni->created_at->format('H:i:s') : 'Belum Absen'}}</span>
                                 </div>
                             </div>
                         </div>
@@ -87,11 +94,18 @@
                         <div class="card-body">
                             <div class="presencecontent">
                                 <div class="iconpresence">
-                                    <ion-icon name="camera"></ion-icon>
+                                    @if ($absenHariIni !== null && $absenHariIni->absen_pulang !== null)
+                                    @php
+                                        $pulang = Storage::url('swafoto_absensi_pulang/'.$absenHariIni->created_at->format('Y-m-d').'/'.$absenHariIni->absen_pulang);
+                                    @endphp
+                                    <img src="{{url($pulang)}}" alt="" width="60px" height="40px">    
+                                    @else
+                                    <ion-icon name="camera"></ion-icon>    
+                                    @endif
                                 </div>
                                 <div class="presencedetail">
                                     <h4 class="presencetitle">Pulang</h4>
-                                    <span>12:00</span>
+                                    <span>{{$absenHariIni !== null && $absenHariIni->absen_pulang !== null ? $absenHariIni->updated_at->format('H:i:s') : 'Belum Absen'}}</span>
                                 </div>
                             </div>
                         </div>
@@ -101,18 +115,19 @@
         </div>
 
         <div class="rekappresence">
-            <div id="chartdiv"></div>
+            {{-- <div id="chartdiv"></div> --}}
+            <h2>Rekap Absensi Bulan {{$namaBulan[$bulanIni * 1]}} Tahun {{$tahunIni}}</h2>
             <div class="row">
                 <div class="col-6">
                     <div class="card">
                         <div class="card-body">
                             <div class="presencecontent">
                                 <div class="iconpresence primary">
-                                    <ion-icon name="log-in"></ion-icon>
+                                    <ion-icon name="checkmark-circle-outline"></ion-icon>
                                 </div>
                                 <div class="presencedetail">
                                     <h4 class="rekappresencetitle">Hadir</h4>
-                                    <span class="rekappresencedetail">0 Hari</span>
+                                    <span class="rekappresencedetail">{{$absenBulanIni->count()}} Hari</span>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +174,13 @@
                                 </div>
                                 <div class="presencedetail">
                                     <h4 class="rekappresencetitle">Terlambat</h4>
-                                    <span class="rekappresencedetail">0 Hari</span>
+                                    @php
+                                        $terlambat = 0;
+                                        foreach ($absenBulanIni as $key => $value) {
+                                            $value->created_at->format('H:i:s') > '08:00:00' ? $terlambat += 1 : $terlambat += 0;
+                                        }
+                                    @endphp
+                                    <span class="rekappresencedetail">{{$terlambat}} Hari</span>
                                 </div>
                             </div>
                         </div>
@@ -171,183 +192,27 @@
             <div class="tab-pane fade show active" id="pilled" role="tabpanel">
                 <ul class="nav nav-tabs style1" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#home" role="tab">
+                        <h5 class="nav-link active" data-toggle="tab" href="#home" role="tab">
                             Bulan Ini
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#profile" role="tab">
-                            Leaderboard
-                        </a>
+                        </h5>
                     </li>
                 </ul>
             </div>
             <div class="tab-content mt-2" style="margin-bottom:100px;">
                 <div class="tab-pane fade show active" id="home" role="tabpanel">
                     <ul class="listview image-listview">
+                        @foreach ($historiBulanIni as $item)
                         <li>
                             <div class="item">
                                 <div class="icon-box bg-primary">
-                                    <ion-icon name="image-outline" role="img" class="md hydrated"
-                                        aria-label="image outline"></ion-icon>
+                                    <ion-icon name="checkmark-circle-outline"></ion-icon>
                                 </div>
                                 <div class="in">
-                                    <div>Photos</div>
-                                    <span class="badge badge-danger">10</span>
+                                    <div>{{$item->created_at->format('d-m-Y')}} <span class="badge badge-success">Hadir</span><span class="badge badge-info">{{$item->created_at->format('H:i:s')}}</span></div>
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="item">
-                                <div class="icon-box bg-secondary">
-                                    <ion-icon name="videocam-outline" role="img" class="md hydrated"
-                                        aria-label="videocam outline"></ion-icon>
-                                </div>
-                                <div class="in">
-                                    <div>Videos</div>
-                                    <span class="text-muted">None</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <div class="icon-box bg-danger">
-                                    <ion-icon name="musical-notes-outline" role="img" class="md hydrated"
-                                        aria-label="musical notes outline"></ion-icon>
-                                </div>
-                                <div class="in">
-                                    <div>Music</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <div class="icon-box bg-danger">
-                                    <ion-icon name="musical-notes-outline" role="img" class="md hydrated"
-                                        aria-label="musical notes outline"></ion-icon>
-                                </div>
-                                <div class="in">
-                                    <div>Music</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <div class="icon-box bg-danger">
-                                    <ion-icon name="musical-notes-outline" role="img" class="md hydrated"
-                                        aria-label="musical notes outline"></ion-icon>
-                                </div>
-                                <div class="in">
-                                    <div>Music</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <div class="icon-box bg-danger">
-                                    <ion-icon name="musical-notes-outline" role="img" class="md hydrated"
-                                        aria-label="musical notes outline"></ion-icon>
-                                </div>
-                                <div class="in">
-                                    <div>Music</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <div class="icon-box bg-danger">
-                                    <ion-icon name="musical-notes-outline" role="img" class="md hydrated"
-                                        aria-label="musical notes outline"></ion-icon>
-                                </div>
-                                <div class="in">
-                                    <div>Music</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <div class="icon-box bg-danger">
-                                    <ion-icon name="musical-notes-outline" role="img" class="md hydrated"
-                                        aria-label="musical notes outline"></ion-icon>
-                                </div>
-                                <div class="in">
-                                    <div>Music</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <div class="icon-box bg-danger">
-                                    <ion-icon name="musical-notes-outline" role="img" class="md hydrated"
-                                        aria-label="musical notes outline"></ion-icon>
-                                </div>
-                                <div class="in">
-                                    <div>Music</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <div class="icon-box bg-danger">
-                                    <ion-icon name="musical-notes-outline" role="img" class="md hydrated"
-                                        aria-label="musical notes outline"></ion-icon>
-                                </div>
-                                <div class="in">
-                                    <div>Music</div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="tab-pane fade" id="profile" role="tabpanel">
-                    <ul class="listview image-listview">
-                        <li>
-                            <div class="item">
-                                <img src="{{ asset('assets/img/sample/avatar/avatar1.jpg') }}" alt="image"
-                                    class="image">
-                                <div class="in">
-                                    <div>Edward Lindgren</div>
-                                    <span class="text-muted">Designer</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <img src="{{ asset('assets/img/sample/avatar/avatar1.jpg') }}" alt="image"
-                                    class="image">
-                                <div class="in">
-                                    <div>Emelda Scandroot</div>
-                                    <span class="badge badge-primary">3</span>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <img src="{{ asset('assets/img/sample/avatar/avatar1.jpg') }}" alt="image"
-                                    class="image">
-                                <div class="in">
-                                    <div>Henry Bove</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <img src="{{ asset('assets/img/sample/avatar/avatar1.jpg') }}" alt="image"
-                                    class="image">
-                                <div class="in">
-                                    <div>Henry Bove</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item">
-                                <img src="{{ asset('assets/img/sample/avatar/avatar1.jpg') }}" alt="image"
-                                    class="image">
-                                <div class="in">
-                                    <div>Henry Bove</div>
-                                </div>
-                            </div>
-                        </li>
+                        @endforeach
                     </ul>
                 </div>
 

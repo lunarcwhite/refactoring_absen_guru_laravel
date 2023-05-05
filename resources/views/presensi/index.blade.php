@@ -17,23 +17,43 @@
         <div class="wide-block pt-2 pb-2">
             <div class="row">
                 <div class="col">
-                    <form action="{{ route('dashboard.user.presensi.absen') }}" method="post" id="absen" enctype="multipart/form-data">
+                    @if ($pulang !== null && $absen > 0)
+                        <h1>@php
+                            echo date('Y-m-d');
+                        @endphp</h1>
+                        <h1>Kamu Sudah Melakukan Absen</h1>
+                    @else
+                        @if ($absen > 0)
+                            <form action="{{ route('dashboard.presensi.absen.pulang') }}" method="post" id="absen"
+                                enctype="multipart/form-data">
+                                @method('patch')
+                            @else
+                                <form action="{{ route('dashboard.presensi.absen.masuk') }}" method="post" id="absen"
+                                    enctype="multipart/form-data">
+                        @endif
                         @csrf
                         <div class="form-group">
                             <input type="hidden" id="lokasi" name="lokasi" class="form-control">
-                            <input type="file" name="swafoto" id="captureimage" capture="user" accept="image/*"
+                            <label for="captureimage"></label>
+                            <input type="file" name="swafoto" class="form-control-file" id="captureimage" capture="user" accept="image/*"
                                 class="form-control">
                         </div>
                         <div id="imagewrapper">
-                            <image id="showimage" preload="none" autoplay="autoplay" src="#" width="80%"
-                                height="auto"></image>
+                            <img id="showimage" preload="none" autoplay="autoplay" src="#" width="80%"
+                                height="auto">
                             <!--there would be a videoposter attribute, but that causes the issue on iOS that the video has no preview when it's done with loading... poster="https://i.imgur.com/JjqzFvI.png" -->
                         </div>
-                        <button class="btn btn-primary mt-2 justify-content-center" type="button"
-                            onclick="konfirmasiAbsen()">
-                            <ion-icon name="checkmark-done-outline"></ion-icon>Absen
-                        </button>
-                    </form>
+                        @if ($absen > 0)
+                            <button class="btn btn-secondary mt-2 btn-lg btn-block" type="button"
+                                onclick="konfirmasiAbsen()">Absen Pulang
+                            </button>
+                        @else
+                            <button class="btn btn-primary mt-2 btn-lg btn-block" type="button"
+                                onclick="konfirmasiAbsen()">Absen Masuk
+                            </button>
+                        @endif
+                        </form>
+                    @endif
                 </div>
             </div>
             <div class="row mt-2">
@@ -76,34 +96,53 @@
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(map);
             var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
-            var circle = L.circle([position.coords.latitude, position.coords.longitude], {
+            var circle = L.circle([-6.91818, 107.61953], {
                 color: 'red',
                 fillColor: '#f03',
                 fillOpacity: 0.5,
-                radius: 70
+                radius: 100
             }).addTo(map);
         }
 
         function errorCallback() {
-
+            Swal.fire(
+                'Kamu Harus Mengizinkan Aplikasi Untuk Mengakses GPS!',
+                'That thing is still around?',
+                'info'
+            )
         }
 
         function konfirmasiAbsen() {
             let form = event.target.form;
-            Swal.fire({
-                text: "Kamu Akan Melakukan Absen!",
-                icon: 'info',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Absen!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            })
+            @if ($absen > 0)
+                Swal.fire({
+                    html: "Kamu Akan Melakukan <h2>Absen Pulang!</h2>",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Absen!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                })
+            @else
+                Swal.fire({
+                    html: "Kamu Akan Melakukan <h2>Absen Masuk!</h2>",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Absen!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                })
+            @endif
         };
-
     </script>
 @endpush

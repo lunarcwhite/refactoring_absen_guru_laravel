@@ -9,7 +9,8 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\UserSettingsController;
-use App\Http\Controllers\UserPresensiController;
+use App\Http\Controllers\PresensiController;
+use App\Http\Controllers\RekapanPresensiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,10 +63,16 @@ Route::middleware('revalidate')->group(function () {
                         Route::get('/admin', 'index')->name('.admin');
                     });
                 });
-                Route::controller(UserPresensiController::class)->group(function () {
-                    Route::name('.user.presensi')->group(function () {
-                        Route::get('user/presensi', 'index')->name('');
-                        Route::post('user/presensi/absen', 'absen')->name('.absen');
+                Route::controller(PresensiController::class)->group(function () {
+                    Route::name('.presensi')->group(function () {
+                        Route::get('/presensi', 'index')->name('');
+                        Route::post('/presensi/absen/masuk', 'absenMasuk')->name('.absen.masuk');
+                        Route::patch('/presensi/absen/pulang', 'absenPulang')->name('.absen.pulang');
+                    });
+                });
+                Route::controller(RekapanPresensiController::class)->group(function () {
+                    Route::name('.rekapan')->group(function () {
+                        Route::get('/rekapan', 'index')->name('');
                     });
                 });
                 Route::controller(UserSettingsController::class)->group(function () {
