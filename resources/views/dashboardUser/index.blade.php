@@ -73,17 +73,17 @@
                             <div class="presencecontent">
                                 <div class="iconpresence">
                                     @if ($absenHariIni !== null)
-                                    @php
-                                        $masuk = Storage::url('swafoto_absensi_masuk/'.$absenHariIni->created_at->format('Y-m-d').'/'.$absenHariIni->absen_masuk);
-                                    @endphp
-                                    <img src="{{url($masuk)}}" alt="" width="60px" height="40px">    
+                                        @php
+                                            $masuk = Storage::url('swafoto_absensi_masuk/' . $absenHariIni->created_at->format('Y-m-d') . '/' . $absenHariIni->absen_masuk);
+                                        @endphp
+                                        <img src="{{ url($masuk) }}" alt="" width="60px" height="40px">
                                     @else
-                                    <ion-icon name="camera"></ion-icon>    
+                                        <ion-icon name="camera"></ion-icon>
                                     @endif
                                 </div>
                                 <div class="presencedetail">
                                     <h4 class="presencetitle">Masuk</h4>
-                                    <span>{{$absenHariIni !== null ? $absenHariIni->created_at->format('H:i:s') : 'Belum Absen'}}</span>
+                                    <span>{{ $absenHariIni !== null ? $absenHariIni->created_at->format('H:i:s') : 'Belum Absen' }}</span>
                                 </div>
                             </div>
                         </div>
@@ -95,17 +95,17 @@
                             <div class="presencecontent">
                                 <div class="iconpresence">
                                     @if ($absenHariIni !== null && $absenHariIni->absen_pulang !== null)
-                                    @php
-                                        $pulang = Storage::url('swafoto_absensi_pulang/'.$absenHariIni->created_at->format('Y-m-d').'/'.$absenHariIni->absen_pulang);
-                                    @endphp
-                                    <img src="{{url($pulang)}}" alt="" width="60px" height="40px">    
+                                        @php
+                                            $pulang = Storage::url('swafoto_absensi_pulang/' . $absenHariIni->created_at->format('Y-m-d') . '/' . $absenHariIni->absen_pulang);
+                                        @endphp
+                                        <img src="{{ url($pulang) }}" alt="" width="60px" height="40px">
                                     @else
-                                    <ion-icon name="camera"></ion-icon>    
+                                        <ion-icon name="camera"></ion-icon>
                                     @endif
                                 </div>
                                 <div class="presencedetail">
                                     <h4 class="presencetitle">Pulang</h4>
-                                    <span>{{$absenHariIni !== null && $absenHariIni->absen_pulang !== null ? $absenHariIni->updated_at->format('H:i:s') : 'Belum Absen'}}</span>
+                                    <span>{{ $absenHariIni !== null && $absenHariIni->absen_pulang !== null ? $absenHariIni->updated_at->format('H:i:s') : 'Belum Absen' }}</span>
                                 </div>
                             </div>
                         </div>
@@ -116,7 +116,7 @@
 
         <div class="rekappresence">
             {{-- <div id="chartdiv"></div> --}}
-            <h2>Rekap Absensi Bulan {{$namaBulan[$bulanIni * 1]}} Tahun {{$tahunIni}}</h2>
+            <h2>Rekap Absensi Bulan {{ $namaBulan[$bulanIni * 1] }} Tahun {{ $tahunIni }}</h2>
             <div class="row">
                 <div class="col-6">
                     <div class="card">
@@ -127,7 +127,7 @@
                                 </div>
                                 <div class="presencedetail">
                                     <h4 class="rekappresencetitle">Hadir</h4>
-                                    <span class="rekappresencedetail">{{$absenBulanIni->count()}} Hari</span>
+                                    <span class="rekappresencedetail">{{ $absenBulanIni->count() }} Hari</span>
                                 </div>
                             </div>
                         </div>
@@ -177,10 +177,10 @@
                                     @php
                                         $terlambat = 0;
                                         foreach ($absenBulanIni as $key => $value) {
-                                            $value->created_at->format('H:i:s') > '08:00:00' ? $terlambat += 1 : $terlambat += 0;
+                                            $value->created_at->format('H:i:s') > '08:00:00' ? ($terlambat += 1) : ($terlambat += 0);
                                         }
                                     @endphp
-                                    <span class="rekappresencedetail">{{$terlambat}} Hari</span>
+                                    <span class="rekappresencedetail">{{ $terlambat }} Hari</span>
                                 </div>
                             </div>
                         </div>
@@ -198,26 +198,56 @@
                     </li>
                 </ul>
             </div>
-            <div class="tab-content mt-2" style="margin-bottom:100px;">
+            <div class="tab-content">
                 <div class="tab-pane fade show active" id="home" role="tabpanel">
                     <ul class="listview image-listview">
-                        @foreach ($historiBulanIni as $item)
                         <li>
                             <div class="item">
-                                <div class="icon-box bg-primary">
-                                    <ion-icon name="checkmark-circle-outline"></ion-icon>
+                                <div class="icon-box">
+                                    <ion-icon name="bookmark-outline"></ion-icon>
                                 </div>
                                 <div class="in">
-                                    <div>{{$item->created_at->format('d-m-Y')}} <span class="badge badge-success">Hadir</span><span class="badge badge-info">{{$item->created_at->format('H:i:s')}}</span></div>
+                                    <div>Tanggal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<span>Status
+                                            | &nbsp;</span><span>Jam Absen</span></div>
                                 </div>
                             </div>
                         </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-content" style="margin-bottom:100px;">
+                <div class="tab-pane fade show active" id="home" role="tabpanel">
+                    <ul class="listview image-listview">
+                        @foreach ($historiBulanIni as $item)
+                            <li>
+                                <div class="item">
+                                    @if ($item->created_at->format('H:i:s') < '08:00:00')
+                                        <div class="icon-box bg-primary">
+                                            <ion-icon name="checkmark-circle-outline"></ion-icon>
+                                        </div>
+                                    @else
+                                        <div class="icon-box bg-danger">
+                                            <ion-icon name="alarm-outline"></ion-icon>
+                                        </div>
+                                    @endif
+                                    <div class="in">
+                                        <div>{{ $item->created_at->format('d-m-Y') }} &nbsp;
+                                            @if ($item->created_at->format('H:i:s') < '08:00:00')
+                                                <span class="badge badge-success">Hadir</span>
+                                            @else
+                                                <span class="badge badge-danger">Terlambat</span>
+                                            @endif
+                                            &nbsp;
+                                            <span class="badge badge-info">{{ $item->created_at->format('H:i:s') }}</span>
+                                        </div>
+                                    </div>
+                            </li>
                         @endforeach
                     </ul>
                 </div>
-
             </div>
         </div>
+    </div>
     </div>
     <!-- * App Capsule -->
 @stop

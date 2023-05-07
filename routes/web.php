@@ -9,8 +9,9 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\UserSettingsController;
-use App\Http\Controllers\PresensiController;
+use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\RekapanPresensiController;
+use App\Http\Controllers\IzinController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,11 +64,18 @@ Route::middleware('revalidate')->group(function () {
                         Route::get('/admin', 'index')->name('.admin');
                     });
                 });
-                Route::controller(PresensiController::class)->group(function () {
+                Route::controller(AbsenController::class)->group(function () {
                     Route::name('.presensi')->group(function () {
-                        Route::get('/presensi', 'index')->name('');
+                        Route::get('/presensi/absen', 'index')->name('.absen');
                         Route::post('/presensi/absen/masuk', 'absenMasuk')->name('.absen.masuk');
                         Route::patch('/presensi/absen/pulang', 'absenPulang')->name('.absen.pulang');
+                    });
+                });
+                Route::controller(IzinController::class)->group(function () {
+                    Route::name('.presensi')->group(function () {
+                        Route::get('/presensi/izin', 'index')->name('.izin');
+                        Route::post('/presensi/izin/store', 'store')->name('.izin.store');
+                        Route::get('/presensi/izin/show/{id}', 'show')->name('.izin.show');
                     });
                 });
                 Route::controller(RekapanPresensiController::class)->group(function () {

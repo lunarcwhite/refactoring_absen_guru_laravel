@@ -1,6 +1,6 @@
 @extends('layouts.menuHalamanUser')
 @section('pageTitle')
-    <h1>Presensi</h1>
+    <h2>Presensi</h2>
     <style>
         #map {
             height: 250px;
@@ -17,6 +17,13 @@
         <div class="wide-block pt-2 pb-2">
             <div class="row">
                 <div class="col">
+                    @if ($izinHariIni > 0)
+                        <h1>@php
+                            echo 'Tanggal ' . date('Y-m-d');
+                        @endphp</h1>
+                        <h1>Kamu Sudah Melakukan Pengajuan Untuk Tidak Hadir</h1>
+                        <h2>Silahkan Lihat <a href="{{route('dashboard.presensi.izin')}}">Disini</a></h2>
+                    @else
                     @if ($pulang !== null && $absen > 0)
                         <h1>@php
                             echo date('Y-m-d');
@@ -53,6 +60,7 @@
                             </button>
                         @endif
                         </form>
+                    @endif
                     @endif
                 </div>
             </div>
@@ -96,7 +104,7 @@
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(map);
             var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
-            var circle = L.circle([-6.91818, 107.61953], {
+            var circle = L.circle([-6.88456, 107.57407], {
                 color: 'red',
                 fillColor: '#f03',
                 fillOpacity: 0.5,

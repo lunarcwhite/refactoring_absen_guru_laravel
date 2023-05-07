@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
 use App\Models\Absensi;
-class PresensiController extends Controller
+use App\Models\Izin;
+class AbsenController extends Controller
 {
     public function index()
     {
@@ -14,7 +15,8 @@ class PresensiController extends Controller
         $data['pulang'] = Absensi::where('user_id', Auth::user()->id)->whereDate('created_at', date('Y-m-d'))
             ->pluck('absen_pulang')
             ->first();
-        return view('presensi.index')->with($data);
+        $data['izinHariIni'] = Izin::where('user_id', Auth::user()->id)->whereDate('created_at', date('Y-m-d'))->count();
+        return view('absen.index')->with($data);
     }
 
     public function absenMasuk(Request $request)
@@ -24,8 +26,8 @@ class PresensiController extends Controller
         ]);
         $data['absen_masuk'] = $request->file('swafoto');
         $data['lokasi_absen_masuk'] = $request->lokasi;
-        $latitudeTempat = -6.91818;
-        $longitudeTempat = 107.61953;
+        $latitudeTempat = -6.88456;
+        $longitudeTempat = 107.57407;
         $lokasiUser = explode(",", $data['lokasi_absen_masuk']);
         $latitudeUser = $lokasiUser[0];
         $longitudeUser = $lokasiUser[1];
@@ -36,7 +38,7 @@ class PresensiController extends Controller
         $data['user_id'] = Auth::user()->id;
         if ($radius > 100) {
             $notification = [
-                'message' => 'Anda Berada Diluar Radius Absen, Jarak Anda '. $radius . ' Meter Dari Sekolah',
+                'message' => 'Anda Berada Diluar Radius Absen. Jarak Anda '. $radius . ' Meter Dari Sekolah',
             ];
             return redirect()
                 ->back()

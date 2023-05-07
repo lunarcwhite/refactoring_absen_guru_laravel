@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('absensis', function (Blueprint $table) {
+        Schema::create('izins', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id');
-            $table->date('tgl_absensi');
-            $table->string('absen_masuk', 255);
-            $table->string('absen_pulang', 255)->nullable();
-            $table->string('lokasi_absen_masuk', 50);
-            $table->string('lokasi_absen_pulang', 50)->nullable();
+            $table->string('keterangan');
+            $table->string('tipe', 5);
+            $table->string('dokumen', 50);
+            $table->char('status_approval', 1)->default(2);
+            $table->bigInteger('user_id')->unsigned();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('absensis');
+        Schema::dropIfExists('izins');
     }
 };

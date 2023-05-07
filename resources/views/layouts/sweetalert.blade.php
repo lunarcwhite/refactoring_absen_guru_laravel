@@ -25,11 +25,11 @@
                 }).showToast()
               break;
             default:
-            Swal.fire(
-                'Gagal',
-                "{{ Session::get('message') }}",
-                'error'
-            )
+            Swal.fire({
+                title : 'Gagal',
+                html: "{{ Session::get('message') }}",
+                icon: 'error'
+        })
                 break;
         }
     @endif

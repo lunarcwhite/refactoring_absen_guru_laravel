@@ -12,7 +12,7 @@
             <strong>Rekapan</strong>
         </div>
     </a>
-    <a href="{{route('dashboard.presensi')}}" class="item">
+    <a href="{{route('dashboard.presensi.absen')}}" class="item">
         <div class="col">
             <ion-icon name="camera" role="img" class="md hydrated" aria-label="add outline"></ion-icon>
             <strong>Absen</strong>
@@ -20,11 +20,11 @@
             </div> --}}
         </div>
     </a>
-    <a href="#" class="item">
+    <a href="{{route('dashboard.presensi.izin')}}" class="item">
         <div class="col">
             <ion-icon name="document-text-outline" role="img" class="md hydrated"
                 aria-label="document text outline"></ion-icon>
-            <strong>Docs</strong>
+            <strong>Izin</strong>
         </div>
     </a>
     <a href="javascript:void()" class="item dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
