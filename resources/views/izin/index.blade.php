@@ -1,9 +1,72 @@
 @extends('layouts.menuHalamanUser')
 @section('pageTitle')
+<style>
+    .file-upload {
+        background-color: #ffffff;
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .file-upload-btn {
+        width: 100%;
+        margin: 0;
+        color: #fff;
+        background: #1FB264;
+        border: none;
+        padding: 10px;
+        border-radius: 4px;
+        border-bottom: 4px solid #15824B;
+        transition: all .2s ease;
+        outline: none;
+        text-transform: uppercase;
+        font-weight: 200;
+    }
+
+    .file-upload-btn:hover {
+        background: #1AA059;
+        color: #ffffff;
+        transition: all .2s ease;
+        cursor: pointer;
+    }
+
+    .file-upload-btn:active {
+        border: 0;
+        transition: all .2s ease;
+    }
+
+    .file-upload-content {
+        display: none;
+        text-align: center;
+    }
+
+    .file-upload-input {
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        outline: none;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .image-dropping,
+    .image-upload-wrap:hover {
+        background-color: #1FB264;
+        border: 4px dashed #ffffff;
+    }
+    .file-upload-image {
+        max-height: 500px;
+        max-width: 100%;
+        margin: auto;
+        padding: 10px;
+    }
+</style>
     <h2>Data Izin / Sakit</h2>
 @endsection
 @section('content')
-    <div class="section full mt-2">
+    <div class="section full mt-2  mb-5">
         <div class="section-title">Title</div>
         <div class="wide-block pt-2 pb-2">
             <div class="row">
@@ -49,7 +112,7 @@
                         </table>
                     </div>
                     @if ($absen < 1 && $izinHariIni !== 1)
-                    <div class="fab-button bottom-right" style="margin-bottom: 95px">
+                    <div class="fab-button bottom-right" style="margin-bottom: 75px">
                         <button class="fab" onclick="openModal('modal-pengajuan',null)">
                             <ion-icon name="add-outline"></ion-icon>
                         </button>
@@ -75,19 +138,19 @@
                         <div class="form-group">
                             <label for="tipe">Pilih Tipe Pengajuan</label>
                             <select name="tipe" id="tipe" class="form-control">
-                                <option value="" class="form-control">--> Pilih Izin / Sakit <-- </option>
+                                <option value="" class="form-control">--> Pilih Izin / Sakit / Cuti <-- </option>
                                 <option value="izin" class="form-control">Izin</option>
                                 <option value="sakit" class="form-control">Sakit</option>
+                                <option value="cuti" class="form-control">Cuti</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="dokumen">Unggah Dokumen Pendukung</label>
-                            <input type="file" class="form-control-file" name="dokumen" id="dokumen">
-                            <p class="text-small">*dokumen dengan format gambar</p>
-                            <div id="imagewrapper">
-                                <img id="showimage" preload="none" autoplay="autoplay" src="#" width="80%"
-                                    height="auto">
-                                <!--there would be a videoposter attribute, but that causes the issue on iOS that the video has no preview when it's done with loading... poster="https://i.imgur.com/JjqzFvI.png" -->
+                        <div class="file-upload">
+                            <button class="file-upload-btn" type="button"
+                                onclick="$('.file-upload-input').trigger( 'click' )">Unggah Dokumen Pendukung</button>
+                            <input class="file-upload-input" name="photo" type='file' onchange="readURL(this);"
+                                accept="image/*" />
+                            <div class="file-upload-content">
+                                <img class="file-upload-image" src="#" alt="your image" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -175,21 +238,23 @@
         }
 
         function readURL(input) {
-
             if (input.files && input.files[0]) {
+
                 var reader = new FileReader();
 
                 reader.onload = function(e) {
-                    $('#showimage').attr('src', e.target.result);
-                }
+                    $('.image-upload-wrap').hide();
+
+                    $('.file-upload-image').attr('src', e.target.result);
+                    $('.file-upload-content').show();
+
+                    $('.image-title').html(input.files[0].name);
+                };
 
                 reader.readAsDataURL(input.files[0]);
+
             }
         }
-
-        $("#dokumen").change(function() {
-            readURL(this);
-        });
 
         function buatFormulir() {
             let form = $("#form-formulir");

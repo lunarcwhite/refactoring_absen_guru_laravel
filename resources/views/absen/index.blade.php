@@ -5,6 +5,62 @@
         #map {
             height: 250px;
         }
+
+        .file-upload {
+            background-color: #ffffff;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .file-upload-btn {
+            width: 100%;
+            margin: 0;
+            color: #fff;
+            background: #1FB264;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            border-bottom: 4px solid #15824B;
+            transition: all .2s ease;
+            outline: none;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .file-upload-btn:hover {
+            background: #1AA059;
+            color: #ffffff;
+            transition: all .2s ease;
+            cursor: pointer;
+        }
+
+        .file-upload-btn:active {
+            border: 0;
+            transition: all .2s ease;
+        }
+
+        .file-upload-content {
+            display: none;
+            text-align: center;
+        }
+
+        .file-upload-input {
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            outline: none;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .file-upload-image {
+            max-height: 500px;
+            max-width: 100%;
+            margin: auto;
+            padding: 10px;
+        }
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
         integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
@@ -12,7 +68,7 @@
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
 @endsection
 @section('content')
-    <div class="section full mt-2">
+    <div class="section full mt-2  mb-5">
         <div class="section-title">Title</div>
         <div class="wide-block pt-2 pb-2">
             <div class="row">
@@ -22,45 +78,44 @@
                             echo 'Tanggal ' . date('Y-m-d');
                         @endphp</h1>
                         <h1>Kamu Sudah Melakukan Pengajuan Untuk Tidak Hadir</h1>
-                        <h2>Silahkan Lihat <a href="{{route('dashboard.presensi.izin')}}">Disini</a></h2>
+                        <h2>Silahkan Lihat <a href="{{ route('dashboard.presensi.izin') }}">Disini</a></h2>
                     @else
-                    @if ($pulang !== null && $absen > 0)
-                        <h1>@php
-                            echo date('Y-m-d');
-                        @endphp</h1>
-                        <h1>Kamu Sudah Melakukan Absen</h1>
-                    @else
-                        @if ($absen > 0)
-                            <form action="{{ route('dashboard.presensi.absen.pulang') }}" method="post" id="absen"
-                                enctype="multipart/form-data">
-                                @method('patch')
-                            @else
-                                <form action="{{ route('dashboard.presensi.absen.masuk') }}" method="post" id="absen"
-                                    enctype="multipart/form-data">
-                        @endif
-                        @csrf
-                        <div class="form-group">
-                            <input type="hidden" id="lokasi" name="lokasi" class="form-control">
-                            <label for="captureimage"></label>
-                            <input type="file" name="swafoto" class="form-control-file" id="captureimage" capture="user" accept="image/*"
-                                class="form-control">
-                        </div>
-                        <div id="imagewrapper">
-                            <img id="showimage" preload="none" autoplay="autoplay" src="#" width="80%"
-                                height="auto">
-                            <!--there would be a videoposter attribute, but that causes the issue on iOS that the video has no preview when it's done with loading... poster="https://i.imgur.com/JjqzFvI.png" -->
-                        </div>
-                        @if ($absen > 0)
-                            <button class="btn btn-secondary mt-2 btn-lg btn-block" type="button"
-                                onclick="konfirmasiAbsen()">Absen Pulang
-                            </button>
+                        @if ($pulang !== null && $absen > 0)
+                            <h1>@php
+                                echo date('Y-m-d');
+                            @endphp</h1>
+                            <h1>Kamu Sudah Melakukan Absen</h1>
                         @else
-                            <button class="btn btn-primary mt-2 btn-lg btn-block" type="button"
-                                onclick="konfirmasiAbsen()">Absen Masuk
-                            </button>
+                            @if ($absen > 0)
+                                <form action="{{ route('dashboard.presensi.absen.pulang') }}" method="post" id="absen"
+                                    enctype="multipart/form-data">
+                                    @method('patch')
+                                @else
+                                    <form action="{{ route('dashboard.presensi.absen.masuk') }}" method="post"
+                                        id="absen" enctype="multipart/form-data">
+                            @endif
+                            @csrf
+                            <div class="form-group">
+                                <input type="hidden" id="lokasi" name="lokasi" class="form-control">
+                            </div>
+                            <div class="file-upload">
+                                <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Klik Disini Untuk Mengambil Foto Selfie</button> 
+                                <input class="file-upload-input" name="swafoto" type='file' onchange="readURL(this);" accept="image/*" capture="user" />
+                                <div class="file-upload-content">
+                                  <img class="file-upload-image" src="#" alt="your image" />
+                                </div>
+                              </div>
+                            @if ($absen > 0)
+                                <button class="btn btn-secondary mt-2 btn-lg btn-block" type="button"
+                                    onclick="konfirmasiAbsen()">Absen Pulang
+                                </button>
+                            @else
+                                <button class="btn btn-primary mt-2 btn-lg btn-block" type="button"
+                                    onclick="konfirmasiAbsen()">Absen Masuk
+                                </button>
+                            @endif
+                            </form>
                         @endif
-                        </form>
-                    @endif
                     @endif
                 </div>
             </div>
@@ -75,21 +130,20 @@
 @push('js')
     <script>
         function readURL(input) {
-
             if (input.files && input.files[0]) {
+
                 var reader = new FileReader();
 
                 reader.onload = function(e) {
-                    $('#showimage').attr('src', e.target.result);
-                }
+                    $('.file-upload-image').attr('src', e.target.result);
+                    $('.file-upload-content').show();
+                };
 
                 reader.readAsDataURL(input.files[0]);
+
             }
         }
 
-        $("#captureimage").change(function() {
-            readURL(this);
-        });
         let lokasi = document.getElementById('lokasi');
 
         if (navigator.geolocation) {

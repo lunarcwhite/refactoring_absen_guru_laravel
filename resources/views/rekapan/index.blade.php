@@ -3,18 +3,21 @@
     <h2>Rekapan Presensi</h2>
 @endsection
 @section('content')
-    <div class="section full mt-2">
+    <div class="section full mt-2  mb-5">
         <div class="section-title">Title</div>
         <div class="wide-block pt-2 pb-2">
             <div class="row">
                 <div class="col">
                     <form action="{{ route('dashboard.rekapan') }}" method="get">
-                        <div class="form-group">
-                            <label for="bulan">Inputkan Bulan dan Tahunnya Pada Inputan Dibawah</label>
+                        <div class="form-group boxed">
+                            <div class="input-wrapper">
+                                <label for="bulan">Inputkan Bulan dan Tahunnya Pada Inputan Dibawah</label>
                             <br />
-                            <input type="month" name="bulan" id="bulan" class="form-control-month">
+                                <input type="month" class="form-control" name="bulan" id="bulan" placeholder="Password"
+                                    autocomplete="off">
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary btn-block">
                             <div class="icon-box bg-primary">
                                 <ion-icon name="search-circle-outline"></ion-icon>
                             </div>Tampilkan

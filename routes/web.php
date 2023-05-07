@@ -84,7 +84,11 @@ Route::middleware('revalidate')->group(function () {
                     });
                 });
                 Route::controller(UserSettingsController::class)->group(function () {
-                    Route::get('user/settings', 'index')->name('.user.settings');
+                    Route::name('.profile')->group(function () {
+                        Route::get('/profile', 'index')->name('');
+                        Route::patch('/profile/update', 'update')->name('.update');
+                        Route::patch('/ubah/kata-sandi', 'changePassword')->name('.changePassword');
+                    });
                 });
             });
         });

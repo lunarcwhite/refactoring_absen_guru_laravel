@@ -7,11 +7,15 @@
     <div class="section" id="user-section">
         <div id="user-detail">
             <div class="avatar">
+                @if(Auth::user()->photo !== null)
+                <img src="{{asset('storage/photo_profile/'.Auth::user()->photo)}}" alt="avatar" class="imaged w64 rounded">
+                @else
                 <img src="{{ asset('assets/img/sample/avatar/avatar1.jpg') }}" alt="avatar" class="imaged w64 rounded">
+                @endif
             </div>
             <div id="user-info">
-                <h2 id="user-name">Adam Abdi Al A'la</h2>
-                <span id="user-role">Head of IT</span>
+                <h2 id="user-name">{{Auth::user()->nama}}</h2>
+                <span id="user-role">{{Auth::user()->email}}</span>
             </div>
         </div>
     </div>
@@ -22,28 +26,18 @@
                 <div class="list-menu">
                     <div class="item-menu text-center">
                         <div class="menu-icon">
-                            <a href="" class="green" style="font-size: 40px;">
+                            <a href="{{route('dashboard.profile')}}" class="green" style="font-size: 40px;">
                                 <ion-icon name="person-sharp"></ion-icon>
                             </a>
                         </div>
                         <div class="menu-name">
-                            <span class="text-center">Profil</span>
+                            <span class="text-center">Profile</span>
                         </div>
                     </div>
                     <div class="item-menu text-center">
                         <div class="menu-icon">
-                            <a href="" class="danger" style="font-size: 40px;">
+                            <a href="{{route('dashboard.rekapan')}}" class="info" style="font-size: 40px;">
                                 <ion-icon name="calendar-number"></ion-icon>
-                            </a>
-                        </div>
-                        <div class="menu-name">
-                            <span class="text-center">Cuti</span>
-                        </div>
-                    </div>
-                    <div class="item-menu text-center">
-                        <div class="menu-icon">
-                            <a href="" class="warning" style="font-size: 40px;">
-                                <ion-icon name="document-text"></ion-icon>
                             </a>
                         </div>
                         <div class="menu-name">
@@ -52,14 +46,28 @@
                     </div>
                     <div class="item-menu text-center">
                         <div class="menu-icon">
-                            <a href="" class="orange" style="font-size: 40px;">
-                                <ion-icon name="location"></ion-icon>
+                            <a href="{{route('dashboard.presensi.izin')}}" class="warning" style="font-size: 40px;">
+                                <ion-icon name="document-text"></ion-icon>
                             </a>
                         </div>
                         <div class="menu-name">
-                            Lokasi
+                            <span class="text-center">Izin</span>
                         </div>
                     </div>
+                    <div class="item-menu text-center">
+                        <div class="menu-icon">
+                            <a href="" onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();" class="danger" style="font-size: 40px;">
+                                <ion-icon name="log-out"></ion-icon>
+                            </a>
+                        </div>
+                        <div class="menu-name">
+                            <span class="text-center">Log Out</span>
+                        </div>
+                    </div>
+                    <form id="logout-form" action="{{route('logout')}}" method="POST" class="d-none">
+                        @csrf
+                    </form>
                 </div>
             </div>
         </div>

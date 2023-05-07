@@ -3,7 +3,7 @@
 
 @include('layouts.headerUser')
 
-<body>
+<body style="background-color: #e9ecef">
 
     <!-- loader -->
     <div id="loader">
