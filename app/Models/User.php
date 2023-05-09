@@ -40,6 +40,14 @@ class User extends Authenticatable
 
     public function role()
     {
-        return $this->hasOne(Roles::class, 'id', 'role_id');
+        return $this->hasOne(Roles::class, 'role_id', 'id');
+    }
+    public function absensi()
+    {
+        return $this->hasMany(Absensi::class, 'user_id', 'id');
+    }
+    public function izin()
+    {
+        return $this->hasMany(Izin::class, 'user_id', 'id');
     }
 }

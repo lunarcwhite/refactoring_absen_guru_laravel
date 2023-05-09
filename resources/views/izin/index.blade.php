@@ -82,19 +82,19 @@
                             <tbody>
                                 @forelse ($izins as $izin)
                                     <tr>
-                                        <td>{{ $izin->created_at->format('d-m-Y') }}</td>
+                                        <td>{{ $izin->tanggal_untuk_pengajuan }}</td>
                                         <td>{{ $izin->tipe }}</td>
                                         @if ($izin->status_approval === '2')
                                             <td>
-                                                <p class="text-warning">Menunggu Persetujuan</p>
+                                                <p class="badge badge-warning">Pending</p>
                                             </td>
                                         @elseif($izin->status_approval === '1')
                                             <td>
-                                                <p class="text-success">Disetujui</p>
+                                                <p class="badge badge-success">Disetujui</p>
                                             </td>
                                         @else
                                             <td>
-                                                <p class="text-danger">Ditolak</p>
+                                                <p class="badge badge-danger">Ditolak</p>
                                             </td>
                                         @endif
                                         <td>
@@ -136,6 +136,10 @@
                         enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
+                            <label for="tanggal">Tanggal</label>
+                            <input type="date" class="form-control" name="tanggal_pengajuan" id="tanggal">
+                        </div>
+                        <div class="form-group">
                             <label for="tipe">Pilih Tipe Pengajuan</label>
                             <select name="tipe" id="tipe" class="form-control">
                                 <option value="" class="form-control">--> Pilih Izin / Sakit / Cuti <-- </option>
@@ -147,7 +151,7 @@
                         <div class="file-upload">
                             <button class="file-upload-btn" type="button"
                                 onclick="$('.file-upload-input').trigger( 'click' )">Unggah Dokumen Pendukung</button>
-                            <input class="file-upload-input" name="photo" type='file' onchange="readURL(this);"
+                            <input class="file-upload-input" name="dokumen" type='file' onchange="readURL(this);"
                                 accept="image/*" />
                             <div class="file-upload-content">
                                 <img class="file-upload-image" src="#" alt="your image" />
@@ -156,12 +160,12 @@
                         <div class="form-group">
                             <textarea name="keterangan" id="keterangan" cols="30" rows="5" placeholder="keterangan" class="form-control"></textarea>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer" id="modal-button">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('modal-pengajuan')">Batal</button>
-                    <button type="button" class="btn btn-primary" onclick="buatFormulir()">Buat</button>
-                </div>
+                    </div>
+                </form>
+                    <div class="modal-footer" id="modal-button">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-pengajuan')">Batal</button>
+                        <button type="button" class="btn btn-primary" onclick="buatFormulir()">Buat</button>
+                    </div>
             </div>
         </div>
     </div>
@@ -177,7 +181,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="tipe">Tanggal Pengajuan</label>
-                        <input type="text" disabled id="tanggal-pengajuan" class="form-control">
+                        <input type="date" disabled id="tanggal-pengajuan" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="tipe">Status Pengajuan</label>
@@ -188,13 +192,14 @@
                             <input type="text" disabled id="tipe-pengajuan" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label for="dokumen">Dokumen Pengajuan</label>
+                            <label for="dokumen-pengajuan">Dokumen Pengajuan</label>
                             <div id="dokumen-pengajuan">
                                 
                             </div>
                         </div>
                         <div class="form-group">
-                            <textarea disabled name="keterangan" id="keterangan-pengajuan" cols="30" rows="5" class="form-control"></textarea>
+                            <label for="keterangan-pengajuan">Keterangan</label>
+                            <textarea disabled id="keterangan-pengajuan" cols="30" rows="5" class="form-control"></textarea>
                         </div>
                 </div>
                 <div class="modal-footer" id="modal-button">
@@ -215,10 +220,10 @@
                     url: "/dashboard/presensi/izin/show/" + data,
                     dataType: 'json',
                     success: function(result){
-                        let date = new Date(result.created_at);
-                        let tanggal = JSON.stringify(date.getDate()).length === 1 ? '0' + date.getDate() : date.getDate();
-                        let bulan = JSON.stringify(date.getMonth()).length === 1 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1);
-                        $("#tanggal-pengajuan").val(tanggal+'-'+bulan +'-'+date.getFullYear());
+                        // let date = new Date(result.created_at);
+                        // let tanggal = JSON.stringify(date.getDate()).length === 1 ? '0' + date.getDate() : date.getDate();
+                        // let bulan = JSON.stringify(date.getMonth()).length === 1 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1);
+                        $("#tanggal-pengajuan").val(result.tanggal_untuk_pengajuan);
                         if (result.status_approval === '2') {
                             $("#status-pengajuan").val('Menunggu Persetujuan');
                         } else if(result.status_approval === '1'){
@@ -228,7 +233,7 @@
                         }
                         $("#tipe-pengajuan").val(result.tipe);
                         $("#keterangan-pengajuan").val(result.keterangan);
-                        $("#dokumen-pengajuan").append(`<img src="{{ asset('storage/pengajuan/${result.tipe}/${date.getFullYear()}-${bulan}-${tanggal}/${result.dokumen}')}}" class="img-fluid" width="100%"/>`)
+                        $("#dokumen-pengajuan").append(`<img src="{{ asset('storage/pengajuan/${result.tipe}/${result.tanggal_untuk_pengajuan}/${result.dokumen}')}}" class="img-fluid" width="100%"/>`)
                     }
                 });
             }

@@ -16,6 +16,7 @@
             <div id="user-info">
                 <h2 id="user-name">{{Auth::user()->nama}}</h2>
                 <span id="user-role">{{Auth::user()->email}}</span>
+                <span id="user-role">{{Auth::user()->id}}</span>
             </div>
         </div>
     </div>
@@ -135,7 +136,7 @@
                                 </div>
                                 <div class="presencedetail">
                                     <h4 class="rekappresencetitle">Hadir</h4>
-                                    <span class="rekappresencedetail">{{ $absenBulanIni->count() }} Hari</span>
+                                    <span class="rekappresencedetail">{{ $historiBulanIni->where('status_absensi', "1")->count() }} Hari</span>
                                 </div>
                             </div>
                         </div>
@@ -150,7 +151,7 @@
                                 </div>
                                 <div class="presencedetail">
                                     <h4 class="rekappresencetitle">Izin</h4>
-                                    <span class="rekappresencedetail">0 Hari</span>
+                                    <span class="rekappresencedetail">{{$izinBulanIni->count()}} Hari</span>
                                 </div>
                             </div>
                         </div>
@@ -162,11 +163,11 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="presencecontent">
-                                <div class="iconpresence warning">
+                                <div class="iconpresence danger">
                                     <ion-icon name="sad"></ion-icon>
                                 </div>
                                 <div class="presencedetail">
-                                    <h4 class="rekappresencetitle">Sakit</h4>
+                                    <h4 class="rekappresencetitle">Alfa</h4>
                                     <span class="rekappresencedetail">0 Hari</span>
                                 </div>
                             </div>
@@ -177,14 +178,14 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="presencecontent">
-                                <div class="iconpresence danger">
+                                <div class="iconpresence warning">
                                     <ion-icon name="alarm"></ion-icon>
                                 </div>
                                 <div class="presencedetail">
                                     <h4 class="rekappresencetitle">Terlambat</h4>
                                     @php
                                         $terlambat = 0;
-                                        foreach ($absenBulanIni as $key => $value) {
+                                        foreach ($historiBulanIni->where('status_absensi', "1") as $key => $value) {
                                             $value->created_at->format('H:i:s') > '08:00:00' ? ($terlambat += 1) : ($terlambat += 0);
                                         }
                                     @endphp
@@ -240,13 +241,23 @@
                                     @endif
                                     <div class="in">
                                         <div>{{ $item->created_at->format('d-m-Y') }} &nbsp;
-                                            @if ($item->created_at->format('H:i:s') < '08:00:00')
+                                            @if ($item->status_absensi === "2")
+                                            <span class="badge badge-info">Cuti</span>
+                                            @elseif($item->status_absensi === "3")
+                                            <span class="badge badge-info">Sakit</span>
+                                            @elseif($item->status_absensi === "4")
+                                            <span class="badge badge-info">Izin</span>
+                                            @elseif($item->status_absensi === "1")
+                                                @if ($item->created_at->format('H:i:s') < '08:00:00')
                                                 <span class="badge badge-success">Hadir</span>
+                                                @else
+                                                <span class="badge badge-warning">Terlambat</span>
+                                                @endif
+                                                &nbsp;
+                                                <span class="badge badge-info">{{ $item->created_at->format('H:i:s') }}</span>
                                             @else
-                                                <span class="badge badge-danger">Terlambat</span>
+                                            <span class="badge badge-danger">Alfa</span>    
                                             @endif
-                                            &nbsp;
-                                            <span class="badge badge-info">{{ $item->created_at->format('H:i:s') }}</span>
                                         </div>
                                     </div>
                             </li>

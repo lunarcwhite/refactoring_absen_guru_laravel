@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('keterangan');
             $table->string('tipe', 5);
             $table->string('dokumen', 50);
+            $table->date('tanggal_untuk_pengajuan');
             $table->char('status_approval', 1)->default(2);
             $table->bigInteger('user_id')->unsigned();
             $table->timestamps();

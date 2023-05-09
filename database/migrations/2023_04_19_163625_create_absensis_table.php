@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('absensis', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
-            $table->date('tgl_absensi');
-            $table->string('absen_masuk', 255);
+            $table->date('tgl_absensi')->nullable();
+            $table->string('absen_masuk', 255)->nullable();
             $table->string('absen_pulang', 255)->nullable();
-            $table->string('lokasi_absen_masuk', 50);
+            $table->string('lokasi_absen_masuk', 50)->nullable();
             $table->string('lokasi_absen_pulang', 50)->nullable();
+            $table->char('status_absensi', 1)->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')

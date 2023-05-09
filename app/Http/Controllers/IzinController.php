@@ -14,12 +14,13 @@ class IzinController extends Controller
     {
         $data['izins'] = Izin::where('user_id', Auth::user()->id)->get();
         $data['absen'] = Absensi::where('user_id', Auth::user()->id)->whereDate('created_at', date('Y-m-d'))->count();
-        $data['izinHariIni'] = Izin::where('user_id', Auth::user()->id)->whereDate('created_at', date('Y-m-d'))->count();
+        $data['izinHariIni'] = Izin::where('user_id', Auth::user()->id)->where('tanggal_untuk_pengajuan', date('Y-m-d'))->count();
         return view('izin.index')->with($data);
     }
     public function store(Request $request)
     {
         $validate = $request->validate([
+            'tanggal_pengajuan' => 'required',
             'dokumen' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
             'tipe' => 'required',
             'keterangan' => 'required'
@@ -32,6 +33,7 @@ class IzinController extends Controller
             $dokumen = $filename;
         }
         $data = [
+            'tanggal_untuk_pengajuan' => $request->tanggal_pengajuan,
             'user_id' => Auth::user()->id,
             'dokumen' => $dokumen,
             'tipe' => $request->tipe,
