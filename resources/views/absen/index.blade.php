@@ -6,60 +6,9 @@
             height: 250px;
         }
 
-        .file-upload {
-            background-color: #ffffff;
-            width: 100%;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .file-upload-btn {
-            width: 100%;
-            margin: 0;
-            color: #fff;
-            background: #1FB264;
-            border: none;
-            padding: 10px;
-            border-radius: 4px;
-            border-bottom: 4px solid #15824B;
-            transition: all .2s ease;
-            outline: none;
-            text-transform: uppercase;
-            font-weight: 700;
-        }
-
-        .file-upload-btn:hover {
-            background: #1AA059;
-            color: #ffffff;
-            transition: all .2s ease;
-            cursor: pointer;
-        }
-
-        .file-upload-btn:active {
-            border: 0;
-            transition: all .2s ease;
-        }
-
-        .file-upload-content {
-            display: none;
-            text-align: center;
-        }
-
-        .file-upload-input {
+        .file {
+            visibility: hidden;
             position: absolute;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            outline: none;
-            opacity: 0;
-            cursor: pointer;
-        }
-        .file-upload-image {
-            max-height: 500px;
-            max-width: 100%;
-            margin: auto;
-            padding: 10px;
         }
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
@@ -98,13 +47,20 @@
                             <div class="form-group">
                                 <input type="hidden" id="lokasi" name="lokasi" class="form-control">
                             </div>
-                            <div class="file-upload">
-                                <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Klik Disini Untuk Mengambil Foto Selfie</button> 
-                                <input class="file-upload-input" name="swafoto" type='file' onchange="readURL(this);" accept="image/*" capture="user" />
-                                <div class="file-upload-content">
-                                  <img class="file-upload-image" src="#" alt="your image" />
-                                </div>
-                              </div>
+                            <div class="form-group boxed">
+                                <input type="file" name="swafoto" class="file image-input" accept="image/*" capture="user">
+                        <div class="input-group">
+                            <input type="text" class="form-control image-filename" disabled placeholder="Ambil Swafoto"
+                                id="file">
+                            <div class="input-group-append">
+                                <button type="button" class="browse btn btn-primary">Klik Disini</button>
+                            </div>
+                        </div>
+                        <div class="image-preview col-sm-12 col-md-6 mt-1">
+        
+                        </div>
+                        </div>
+                </div>
                             @if ($absen > 0)
                                 <button class="btn btn-secondary mt-2 btn-lg btn-block" type="button"
                                     onclick="konfirmasiAbsen()">Absen Pulang
@@ -206,5 +162,32 @@
                 })
             @endif
         };
+        $(document).on("click", ".browse", function() {
+            $('.image-preview').empty();
+            var file = $(this).parents().find(".file");
+            file.trigger("click");
+        });
+        $('input[type="file"]').change(function(e) {
+            var fileName = e.target.files[0].name;
+            $("#file").val(fileName);
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                // get loaded data and render thumbnail.
+                $('.image-preview').append(
+                    `<button type="button" class="close bg-danger" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button><img src="https://placehold.it/80x80" id="preview" class="img-thumbnail">`
+                );
+                document.getElementById("preview").src = e.target.result;
+            };
+            // read the image file as a data URL.
+            reader.readAsDataURL(this.files[0]);
+        });
+        $(document).on("click", ".close", function() {
+            $('.image-preview').empty();
+            $("#file").val("");
+            $(".file").val("");
+        });
     </script>
 @endpush

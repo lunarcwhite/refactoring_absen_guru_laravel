@@ -58,11 +58,25 @@
                                         @endif
                                         <div class="in">
                                             <div>{{ $item->created_at->format('d-m-Y') }} &nbsp;
+                                                @if ($item->status_absensi === "2")
+                                            <span class="badge badge-info">Cuti</span>
+                                            @elseif($item->status_absensi === "3")
+                                            <span class="badge badge-info">Sakit</span>
+                                            @elseif($item->status_absensi === "4")
+                                            <span class="badge badge-info">Izin</span>
+                                            {{-- 5 === libur --}}
+                                            {{-- 6 === tidak ada jadwal --}}
+                                            @elseif($item->status_absensi === "1")
                                                 @if ($item->created_at->format('H:i:s') < '08:00:00')
-                                                    <span class="badge badge-success">Hadir</span>
+                                                <span class="badge badge-success">Hadir</span>
                                                 @else
-                                                    <span class="badge badge-danger">Terlambat</span>
+                                                <span class="badge badge-warning">Terlambat</span>
                                                 @endif
+                                                &nbsp;
+                                                <span class="badge badge-info">{{ $item->created_at->format('H:i:s') }}</span>
+                                            @else
+                                            <span class="badge badge-danger">Alfa</span>    
+                                            @endif
                                                 &nbsp;
                                                 <span
                                                     class="badge badge-info">{{ $item->created_at->format('H:i:s') }}</span>

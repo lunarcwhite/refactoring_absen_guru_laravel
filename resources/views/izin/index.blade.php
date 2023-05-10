@@ -1,68 +1,11 @@
 @extends('layouts.menuHalamanUser')
 @section('pageTitle')
-<style>
-    .file-upload {
-        background-color: #ffffff;
-        width: 100%;
-        margin: 0 auto;
-        padding: 20px;
-    }
-
-    .file-upload-btn {
-        width: 100%;
-        margin: 0;
-        color: #fff;
-        background: #1FB264;
-        border: none;
-        padding: 10px;
-        border-radius: 4px;
-        border-bottom: 4px solid #15824B;
-        transition: all .2s ease;
-        outline: none;
-        text-transform: uppercase;
-        font-weight: 200;
-    }
-
-    .file-upload-btn:hover {
-        background: #1AA059;
-        color: #ffffff;
-        transition: all .2s ease;
-        cursor: pointer;
-    }
-
-    .file-upload-btn:active {
-        border: 0;
-        transition: all .2s ease;
-    }
-
-    .file-upload-content {
-        display: none;
-        text-align: center;
-    }
-
-    .file-upload-input {
-        position: absolute;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        outline: none;
-        opacity: 0;
-        cursor: pointer;
-    }
-
-    .image-dropping,
-    .image-upload-wrap:hover {
-        background-color: #1FB264;
-        border: 4px dashed #ffffff;
-    }
-    .file-upload-image {
-        max-height: 500px;
-        max-width: 100%;
-        margin: auto;
-        padding: 10px;
-    }
-</style>
+    <style>
+        .file {
+            visibility: hidden;
+            position: absolute;
+        }
+    </style>
     <h2>Data Izin / Sakit</h2>
 @endsection
 @section('content')
@@ -111,13 +54,11 @@
                             </tbody>
                         </table>
                     </div>
-                    @if ($absen < 1 && $izinHariIni !== 1)
-                    <div class="fab-button bottom-right" style="margin-bottom: 75px">
-                        <button class="fab" onclick="openModal('modal-pengajuan',null)">
-                            <ion-icon name="add-outline"></ion-icon>
-                        </button>
-                    </div>
-                    @endif
+                        <div class="fab-button bottom-right" style="margin-bottom: 75px">
+                            <button class="fab" onclick="openModal('modal-pengajuan',null)">
+                                <ion-icon name="add-outline"></ion-icon>
+                            </button>
+                        </div>
                 </div>
             </div>
         </div>
@@ -148,28 +89,33 @@
                                 <option value="cuti" class="form-control">Cuti</option>
                             </select>
                         </div>
-                        <div class="file-upload">
-                            <button class="file-upload-btn" type="button"
-                                onclick="$('.file-upload-input').trigger( 'click' )">Unggah Dokumen Pendukung</button>
-                            <input class="file-upload-input" name="dokumen" type='file' onchange="readURL(this);"
-                                accept="image/*" />
-                            <div class="file-upload-content">
-                                <img class="file-upload-image" src="#" alt="your image" />
+                        <div class="form-group boxed">
+                            <input type="file" name="dokumen" class="file image-input" accept="image/*">
+                            <div class="input-group">
+                                <input type="text" class="form-control image-filename" disabled
+                                    placeholder="Unggah Dokumen" id="file">
+                                <div class="input-group-append">
+                                    <button type="button" class="browse btn btn-primary">Klik Disini</button>
+                                </div>
+                            </div>
+                            <div class="image-preview col-12 mt-1">
+
                             </div>
                         </div>
                         <div class="form-group">
                             <textarea name="keterangan" id="keterangan" cols="30" rows="5" placeholder="keterangan" class="form-control"></textarea>
                         </div>
-                    </div>
+                </div>
                 </form>
-                    <div class="modal-footer" id="modal-button">
-                        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-pengajuan')">Batal</button>
-                        <button type="button" class="btn btn-primary" onclick="buatFormulir()">Buat</button>
-                    </div>
+                <div class="modal-footer" id="modal-button">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modal-pengajuan')">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="buatFormulir()">Buat</button>
+                </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modal-lihat-pengajuan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal-lihat-pengajuan" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -187,23 +133,24 @@
                         <label for="tipe">Status Pengajuan</label>
                         <input type="text" disabled id="status-pengajuan" class="form-control">
                     </div>
-                        <div class="form-group">
-                            <label for="tipe">Tipe Pengajuan</label>
-                            <input type="text" disabled id="tipe-pengajuan" class="form-control">
+                    <div class="form-group">
+                        <label for="tipe">Tipe Pengajuan</label>
+                        <input type="text" disabled id="tipe-pengajuan" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="dokumen-pengajuan">Dokumen Pengajuan</label>
+                        <div id="dokumen-pengajuan">
+
                         </div>
-                        <div class="form-group">
-                            <label for="dokumen-pengajuan">Dokumen Pengajuan</label>
-                            <div id="dokumen-pengajuan">
-                                
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="keterangan-pengajuan">Keterangan</label>
-                            <textarea disabled id="keterangan-pengajuan" cols="30" rows="5" class="form-control"></textarea>
-                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="keterangan-pengajuan">Keterangan</label>
+                        <textarea disabled id="keterangan-pengajuan" cols="30" rows="5" class="form-control"></textarea>
+                    </div>
                 </div>
                 <div class="modal-footer" id="modal-button">
-                    <button type="button" class="btn btn-danger" onclick="closeModal('modal-lihat-pengajuan')">Tutup</button>
+                    <button type="button" class="btn btn-danger"
+                        onclick="closeModal('modal-lihat-pengajuan')">Tutup</button>
                 </div>
             </div>
         </div>
@@ -213,52 +160,36 @@
     <script>
         function openModal(id, data) {
             $(`#${id}`).modal('show');
-            if(data !== null){
+            if (data !== null) {
                 $("#dokumen-pengajuan").empty();
                 $.ajax({
                     type: 'get',
                     url: "/dashboard/presensi/izin/show/" + data,
                     dataType: 'json',
-                    success: function(result){
+                    success: function(result) {
                         // let date = new Date(result.created_at);
                         // let tanggal = JSON.stringify(date.getDate()).length === 1 ? '0' + date.getDate() : date.getDate();
                         // let bulan = JSON.stringify(date.getMonth()).length === 1 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1);
                         $("#tanggal-pengajuan").val(result.tanggal_untuk_pengajuan);
                         if (result.status_approval === '2') {
                             $("#status-pengajuan").val('Menunggu Persetujuan');
-                        } else if(result.status_approval === '1'){
+                        } else if (result.status_approval === '1') {
                             $("#status-pengajuan").val('Disetujui');
-                        }else{
+                        } else {
                             $("#status-pengajuan").val('Ditolak');
                         }
                         $("#tipe-pengajuan").val(result.tipe);
                         $("#keterangan-pengajuan").val(result.keterangan);
-                        $("#dokumen-pengajuan").append(`<img src="{{ asset('storage/pengajuan/${result.tipe}/${result.tanggal_untuk_pengajuan}/${result.dokumen}')}}" class="img-fluid" width="100%"/>`)
+                        $("#dokumen-pengajuan").append(
+                            `<img src="{{ asset('storage/pengajuan/${result.tipe}/${result.tanggal_untuk_pengajuan}/${result.dokumen}') }}" class="img-fluid" width="100%"/>`
+                            )
                     }
                 });
             }
         }
+
         function closeModal(id) {
             $(`#${id}`).modal('hide');
-        }
-
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-
-                var reader = new FileReader();
-
-                reader.onload = function(e) {
-                    $('.image-upload-wrap').hide();
-
-                    $('.file-upload-image').attr('src', e.target.result);
-                    $('.file-upload-content').show();
-
-                    $('.image-title').html(input.files[0].name);
-                };
-
-                reader.readAsDataURL(input.files[0]);
-
-            }
         }
 
         function buatFormulir() {
@@ -278,5 +209,32 @@
                 }
             })
         }
+        $(document).on("click", ".browse", function() {
+            $('.image-preview').empty();
+            var file = $(this).parents().find(".file");
+            file.trigger("click");
+        });
+        $('input[type="file"]').change(function(e) {
+            var fileName = e.target.files[0].name;
+            $("#file").val(fileName);
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                // get loaded data and render thumbnail.
+                $('.image-preview').append(
+                    `<button type="button" class="close bg-danger" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button><img src="https://placehold.it/80x80" id="preview" class="img-thumbnail">`
+                );
+                document.getElementById("preview").src = e.target.result;
+            };
+            // read the image file as a data URL.
+            reader.readAsDataURL(this.files[0]);
+        });
+        $(document).on("click", ".close", function() {
+            $('.image-preview').empty();
+            $("#file").val("");
+            $(".file").val("");
+        });
     </script>
 @endpush

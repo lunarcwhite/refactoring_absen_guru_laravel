@@ -61,7 +61,11 @@ Route::middleware('revalidate')->group(function () {
                 });
                 Route::middleware('admin')->group(function () {
                     Route::controller(DashboardAdminController::class)->group(function () {
-                        Route::get('/admin', 'index')->name('.admin');
+                        Route::name('.admin')->group(function () {
+                            Route::prefix('/admin')->group(function () {
+                                Route::get('/', 'index');
+                            });
+                        });
                     });
                 });
                 Route::controller(AbsenController::class)->group(function () {
@@ -81,6 +85,9 @@ Route::middleware('revalidate')->group(function () {
                 Route::controller(RekapanPresensiController::class)->group(function () {
                     Route::name('.rekapan')->group(function () {
                         Route::get('/rekapan', 'index')->name('');
+                            Route::middleware('admin')->group(function (){
+                                Route::get('/rekapan/{id}', 'show')->name('.show');
+                            });
                     });
                 });
                 Route::controller(UserSettingsController::class)->group(function () {

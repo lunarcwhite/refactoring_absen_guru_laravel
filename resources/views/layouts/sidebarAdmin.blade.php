@@ -1,14 +1,14 @@
-<div id="sidebar" class="active">
+<div id="sidebar">
     <div class="sidebar-wrapper active">
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <a href="index.html"><img src="{{asset('assets/images/logo/logo.svg')}}" alt="Logo" srcset="" /></a>
+                    <a href="index.html"><img src="./assets/compiled/svg/logo.svg" alt="Logo" srcset="" /></a>
                 </div>
                 <div class="theme-toggle d-flex gap-2 align-items-center mt-2">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                        aria-hidden="true" role="img" class="iconify iconify--system-uicons" width="20" height="20"
-                        preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
+                        aria-hidden="true" role="img" class="iconify iconify--system-uicons" width="20"
+                        height="20" preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
                         <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round"
                             stroke-linejoin="round">
                             <path
@@ -41,10 +41,20 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-title">Menu</li>
-                <li class="sidebar-item" >
-                    <a href="{{route('dashboard')}}" class="sidebar-link">
+
+                <li class="sidebar-item">
+                    <a href="{{route('dashboard.admin')}}" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-title">Absensi</li>
+
+                <li class="sidebar-item">
+                    <a href="{{route('dashboard.rekapan')}}" class="sidebar-link">
+                        <i class="bi bi-grid-1x2-fill"></i>
+                        <span>Rekapan Absen</span>
                     </a>
                 </li>
             </ul>

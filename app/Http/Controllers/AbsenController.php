@@ -15,7 +15,7 @@ class AbsenController extends Controller
         $data['pulang'] = Absensi::where('user_id', Auth::user()->id)->whereDate('created_at', date('Y-m-d'))
             ->pluck('absen_pulang')
             ->first();
-        $data['izinHariIni'] = Izin::where('user_id', Auth::user()->id)->whereDate('created_at', date('Y-m-d'))->count();
+        $data['izinHariIni'] = Izin::where('user_id', Auth::user()->id)->whereDate('tanggal_untuk_pengajuan', date('Y-m-d'))->count();
         return view('absen.index')->with($data);
     }
 
@@ -36,8 +36,9 @@ class AbsenController extends Controller
         $radius = round($jarak["meters"]);
         $data['tgl_absensi'] = date('Y-m-d');
         $data['user_id'] = Auth::user()->id;
-        if ($radius > 100) {
+        if ($radius < 100) {
             $notification = [
+                'alert-type' => 'error',
                 'message' => 'Anda Berada Diluar Radius Absen. Jarak Anda '. $radius . ' Meter Dari Sekolah',
             ];
             return redirect()
@@ -50,6 +51,7 @@ class AbsenController extends Controller
                 $data['absen_masuk']->storeAs('public/swafoto_absensi_masuk/' . date('Y-m-d'), $filename);
                 $data['absen_masuk'] = $filename;
             }
+            $data['status_absensi'] = 1;
             Absensi::create($data);
             $notification = [
                 'message' => 'Absen Masuk Berhasil',

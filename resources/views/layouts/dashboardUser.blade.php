@@ -3,7 +3,7 @@
 
 @include('layouts.headerUser')
 
-<body style="background-color:#e9ecef;">
+<body>
 
     <!-- loader -->
     <div id="loader">
@@ -19,8 +19,8 @@
 
     <!-- App Bottom Menu -->
     @include('layouts.bottomMenuUser')
-
     @include('layouts.scriptsUser')
+
     @include('layouts.sweetalert')
     @stack('js')
 </body>

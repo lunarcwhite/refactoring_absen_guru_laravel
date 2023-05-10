@@ -21,7 +21,7 @@ class UserSettingsController extends Controller
             'no_hp' => 'numeric|max_digits:13',
             'email' => 'email',
             'nama' => 'string',
-            'photo' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            'photo' => 'image|mimes:jpeg,png,jpg',
         ]);
         $id = Auth::user()->id;
         $input = $request->all();
@@ -35,7 +35,11 @@ class UserSettingsController extends Controller
                 Storage::delete('photo_profile/',Auth::user()->photo);
             }
         }else{
-            $data['photo'] = null;
+            if(Auth::user()->photo){
+                $data['photo'] = Auth::user()->photo;
+            }else{
+                $data['photo'] = null;
+            }
         }
         User::where('id', $id)->update($data);
         $notificatin = [

@@ -1,1 +1,1 @@
-@include('layouts.bottomMenuUser')
+@extends('layouts.dashboardAdmin')

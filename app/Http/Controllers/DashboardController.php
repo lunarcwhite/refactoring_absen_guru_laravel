@@ -9,6 +9,10 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        // $notification = [
+        //     'message' => 'Login Berhasil',
+        //     'alert-type' => 'success',
+        // ];
         if(Auth::user()->role_id == 2){
             return redirect()->route('dashboard.user');
         }else{
