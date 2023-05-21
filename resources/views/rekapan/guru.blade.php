@@ -12,11 +12,8 @@
 Daftar Guru
 @endsection
 @section('content')
-<div class="card">
-    <div class="card-header">
-        <h6 class="card-title">About Vertical Navbar</h6>
-    </div>
-    <div class="card-body">
+<div class="row">
+    <div class="col">
         <div class="table-responsive">
             <table class="table table-hover" id="myTable">
                 <thead>
@@ -29,11 +26,11 @@ Daftar Guru
                 <tbody>
                     @foreach ($users as $no => $user)
                         <tr>
-                            <td>{{$no++}}</td>
+                            <td>{{$no+1}}</td>
                             <td>{{$user->username}}</td>
                             <td>{{$user->email}}</td>
                             <td>{{$user->no_hp}}</td>
-                            <td><a href="{{route('dashboard.rekapan.show',$user->id)}}" class="badge bg-info">Lihat</a>
+                            <td><a href="{{route('dashboard.rekapan.show.guru',$user->id)}}" class="badge bg-info">Lihat</a>
                             </td>
                         </tr>
                     @endforeach

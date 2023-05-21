@@ -73,6 +73,72 @@ class IzinController extends Controller
     }
     public function show($id)
     {
-        return Izin::find($id)->toJson();
+        return Izin::with('user')->findOrFail($id)->toJson();
+    }
+    public function pending()
+    {
+        $data['izins'] = Izin::where('status_approval', 2)->get();
+        return view('izin.pending')->with($data);
+    }
+    public function konfirmasi(Request $request)
+    {
+        $izin = Izin::where('id', $request->id_pengajuan)->first();
+        if($request->konfirmasi_pengajuan === "setuju"){
+            Izin::where('id', $request->id_pengajuan)->update([
+                'status_approval' => 1
+            ]);
+            $tipe = $izin->tipe;
+    
+            if($tipe === 'izin'){
+                $data['status_absensi'] = 4;
+            }elseif($tipe === 'sakit'){
+                $data['status_absensi'] = 3;
+            }elseif($tipe === 'cuti'){
+                $data['status_absensi'] = 2;
+            }
+
+            $notification = [
+                'alert-type' => 'success',
+                'message' => 'Pengajuan Disetujui'
+            ];
+        }else if($request->konfirmasi_pengajuan === "tolak"){
+            Izin::where('id', $request->id_pengajuan)->update([
+                'status_approval' => 0
+            ]);
+            $data['status_absensi'] = 7;
+            $notification = [
+                'alert-type' => 'success',
+                'message' => 'Pengajuan Ditolak'
+            ];
+        }else{
+            $notification = [
+                'alert-type' => 'error',
+                'message' => 'Konfirmasi Pengajuan Izin Gagal'
+            ];
+        }
+        $data['tgl_absensi'] = $izin->tanggal_untuk_pengajuan;
+        $data['user_id'] = $izin->user_id;
+        $absen = Absensi::where('tgl_absensi', $izin->tanggal_untuk_pengajuan)->where('user_id',$izin->user_id)->first();
+        if(!$absen){
+            $data['created_at'] = $data['tgl_absensi'].' 06:00:00';
+            $data['updated_at'] = null;
+            Absensi::create($data);
+        }else{
+            $absen->update([
+                'status_absensi' => $data['status_absensi'],
+            ]);
+        }
+        
+        return redirect()->back()->with($notification);
+    }
+    public function ditolak()
+    {
+        $data['ditolaks'] = Izin::where('status_approval', 0)->get();
+        return view('izin.ditolak')->with($data);
+    }
+    public function disetujui()
+    {
+        $data['disetujuis'] = Izin::where('status_approval', 1)->get();
+        return view('izin.disetujui')->with($data);
     }
 }

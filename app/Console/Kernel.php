@@ -15,11 +15,13 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\MingguLibur::class,
+        Commands\DeletePendingPengajuan::class,
     ];
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('inspire')->everyMinute();
-        $schedule->command('minggu:libur')->sundays();
+        // $schedule->command('inspire')->everyMinute();
+        $schedule->command('minggu:libur')->sundays('00:01');
+        $schedule->command('delete:pending')->monthly();
     }
 
     /**

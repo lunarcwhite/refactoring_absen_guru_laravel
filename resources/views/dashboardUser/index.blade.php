@@ -14,9 +14,10 @@
                 @endif
             </div>
             <div id="user-info">
-                <h2 id="user-name">{{Auth::user()->nama}}</h2>
-                <span id="user-role">{{Auth::user()->email}}</span>
+                <h2 id="user-name">Nama User</h2>
+                <span id="user-role">Email User</span>
                 <span id="user-role">{{Auth::user()->id}}</span>
+                
             </div>
         </div>
     </div>
@@ -186,7 +187,7 @@
                                     @php
                                         $terlambat = 0;
                                         foreach ($historiBulanIni->where('status_absensi', "1") as $key => $value) {
-                                            $value->created_at->format('H:i:s') > '08:00:00' ? ($terlambat += 1) : ($terlambat += 0);
+                                            $value->created_at->format('H:i:s') > $jam->jam ? ($terlambat += 1) : ($terlambat += 0);
                                         }
                                     @endphp
                                     <span class="rekappresencedetail">{{ $terlambat }} Hari</span>
@@ -247,10 +248,14 @@
                                             <span class="badge badge-info">Sakit</span>
                                             @elseif($item->status_absensi === "4")
                                             <span class="badge badge-info">Izin</span>
-                                            {{-- 5 === libur --}}
-                                            {{-- 6 === tidak ada jadwal --}}
+                                            @elseif($item->status_absensi === '5')
+                                            <span class="badge badge-success">Hari Libur</span>
+                                            @elseif($item->status_absensi === '6')
+                                            <span class="badge badge-secondary">Tidak Ada Jadwal</span>
+                                            @elseif($item->status_absensi === '7')
+                                            <span class="badge badge-secondary">Pengajuan Izin Ditolak</span>
                                             @elseif($item->status_absensi === "1")
-                                                @if ($item->created_at->format('H:i:s') < '08:00:00')
+                                                @if ($item->created_at->format('H:i:s') < $jam->jam)
                                                 <span class="badge badge-success">Hadir</span>
                                                 @else
                                                 <span class="badge badge-warning">Terlambat</span>

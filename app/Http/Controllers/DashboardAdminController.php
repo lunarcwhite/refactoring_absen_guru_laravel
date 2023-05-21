@@ -10,9 +10,10 @@ class DashboardAdminController extends Controller
 {
     public function index()
     {
-        if(Auth::user()->role_id !== 1){
+        if(Auth::user()->role_id == 2){
             return redirect()->route('dashboard.user');
+        }else{
+            return view('dashboardAdmin.index');
         }
-        return view('dashboardAdmin.index');
     }
 }

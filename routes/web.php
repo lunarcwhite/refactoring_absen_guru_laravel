@@ -12,6 +12,7 @@ use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\RekapanPresensiController;
 use App\Http\Controllers\IzinController;
+use App\Http\Controllers\KonfigurasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,15 +68,36 @@ Route::middleware('revalidate')->group(function () {
                             });
                         });
                     });
+                    Route::controller(KonfigurasiController::class)->group(function () {
+                        Route::name('.setting.')->group(function () {
+                            Route::prefix('/setting')->group(function () {
+                                Route::get('/hariLibur', 'hariLibur')->name('hariLibur');
+                                Route::post('/hariLibur/store', 'hariLiburStore')->name('hariLibur.store');
+                                Route::delete('/hariLibur/delete/{id}', 'hariLiburDelete')->name('hariLibur.delete');
+                                Route::get('/lokasi', 'lokasi')->name('lokasi');
+                                Route::post('/lokasi/update', 'lokasiUpdate')->name('lokasi.update');
+                                Route::get('/absen', 'jamHari')->name('absen');
+                                Route::get('/absen/{id}', 'jamHariSetting')->name('absen.setting');
+                                Route::put('/absen/{id}/update', 'jamHariSettingUpdate')->name('absen.update');
+                            });
+                        });
+                    });
                 });
                 Route::controller(AbsenController::class)->group(function () {
                     Route::name('.presensi')->group(function () {
                         Route::get('/presensi/absen', 'index')->name('.absen');
-                        Route::post('/presensi/absen/masuk', 'absenMasuk')->name('.absen.masuk');
-                        Route::patch('/presensi/absen/pulang', 'absenPulang')->name('.absen.pulang');
+                        Route::post('/presensi/absen/store', 'absen')->name('.absen.store');
                     });
                 });
                 Route::controller(IzinController::class)->group(function () {
+                    Route::name('.pengajuan')->group(function () {
+                        Route::middleware('admin')->group(function(){
+                            Route::get('/pengajuan/pending', 'pending')->name('.pending');
+                            Route::patch('/pengajuan/izin/konfirmasi', 'konfirmasi')->name('.konfirmasi');
+                            Route::get('/pengajuan/disetujui', 'disetujui')->name('.disetujui');
+                            Route::get('/pengajuan/ditolak', 'ditolak')->name('.ditolak');
+                        });
+                    });
                     Route::name('.presensi')->group(function () {
                         Route::get('/presensi/izin', 'index')->name('.izin');
                         Route::post('/presensi/izin/store', 'store')->name('.izin.store');
@@ -86,7 +108,10 @@ Route::middleware('revalidate')->group(function () {
                     Route::name('.rekapan')->group(function () {
                         Route::get('/rekapan', 'index')->name('');
                             Route::middleware('admin')->group(function (){
-                                Route::get('/rekapan/{id}', 'show')->name('.show');
+                                Route::get('/rekapan/hariIni', 'hariIni')->name('.hariIni');
+                                Route::get('/rekapan/guru', 'guru')->name('.guru');
+                                Route::get('/rekapan/guru/{id}', 'showGuru')->name('.show.guru');
+                                Route::get('/rekapan/tanggal', 'tanggal')->name('.tanggal');
                             });
                     });
                 });

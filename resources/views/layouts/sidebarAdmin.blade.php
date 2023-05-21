@@ -40,8 +40,6 @@
         </div>
         <div class="sidebar-menu">
             <ul class="menu">
-                <li class="sidebar-title">Menu</li>
-
                 <li class="sidebar-item">
                     <a href="{{route('dashboard.admin')}}" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
@@ -50,12 +48,80 @@
                 </li>
 
                 <li class="sidebar-title">Absensi</li>
-
-                <li class="sidebar-item">
-                    <a href="{{route('dashboard.rekapan')}}" class="sidebar-link">
-                        <i class="bi bi-grid-1x2-fill"></i>
-                        <span>Rekapan Absen</span>
+                <li class="sidebar-item has-sub">
+                    <a href="#" class="sidebar-link">
+                      <i class="bi bi-stack"></i>
+                      <span>Absensi</span>
                     </a>
+    
+                    <ul class="submenu">
+                        <li class="submenu-item">
+                            <a href="{{route('dashboard.rekapan.hariIni')}}" class="submenu-link">
+                                Absen Hari Ini
+                            </a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="{{route('dashboard.rekapan.guru')}}" class="submenu-link">
+                                Rekapan Per Guru
+                            </a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="{{route('dashboard.rekapan.tanggal')}}" class="submenu-link">
+                               Rekapan Per Tanggal
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @can('admin')
+                <li class="sidebar-item has-sub">
+                    <a href="#" class="sidebar-link">
+                      <i class="bi bi-stack"></i>
+                      <span>Pengajuan Izin</span>
+                    </a>
+    
+                    <ul class="submenu">
+                        <li class="submenu-item">
+                            <a href="{{route('dashboard.pengajuan.pending')}}" class="submenu-link">
+                                Pending
+                            </a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="{{route('dashboard.pengajuan.disetujui')}}" class="submenu-link">
+                                Disetujui
+                            </a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="{{route('dashboard.pengajuan.ditolak')}}" class="submenu-link">
+                                Ditolak
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @endcan
+                <li class="sidebar-title">Konfigurasi</li>
+                <li class="sidebar-item has-sub">
+                    <a href="#" class="sidebar-link">
+                      <i class="bi bi-stack"></i>
+                      <span>Absen</span>
+                    </a>
+    
+                    <ul class="submenu">
+                        <li class="submenu-item">
+                            <a href="{{route('dashboard.setting.absen')}}" class="submenu-link">
+                                Jam & Hari Absen
+                            </a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="{{route('dashboard.setting.lokasi')}}" class="submenu-link">
+                                Lokasi Absen
+                            </a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="{{route('dashboard.setting.hariLibur')}}" class="submenu-link">
+                                Hari Libur
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>

@@ -2,6 +2,9 @@ $(function() {
 	$('.menu a[href~="' + location.href + '"]').parents('li').addClass('active');
 });
 $(function() {
+	$('.submenu a[href~="' + location.href + '"]').parents('li').addClass('active').parents('ul').addClass('submenu-open');
+});
+$(function() {
 	$('.order-first a[href~="' + location.href + '"]').parents('li').addClass('active');
 });
 (function (ft) {

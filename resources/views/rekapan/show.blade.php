@@ -13,27 +13,24 @@
     {{ $user->nama }}
 @endsection
 @section('content')
-    <div class="card">
-        <div class="card-header">
-            <h6 class="card-title">Pilih Bulan</h6>
-        </div>
-        <div class="card-body">
-            <div class="row mb-5">
-                <div class="col-md-5 col-sm-12">
-                    <form action="{{ route('dashboard.rekapan.show', $user->id) }}" method="get">
-                        <div class="input-group">
-                            <div class="input-group-text" id="basic-addon1"><i class="bi bi-calendar-month"></i></div>
-                            <input type="month" name="bulan" class="form-control" id="bulan"
-                                placeholder="Recipient's username" aria-label="Recipient's username"
-                                aria-describedby="button-addon2">
-                            <button class="btn btn-outline-info" type="submit" id="button-addon2">
-                                Tampilkan
-                            </button>
-                        </div>
-                    </form>
-                </div>
+<div class="row mb-5">
+    <div class="col-md-5 col-sm-12">
+        <form action="{{ route('dashboard.rekapan.show.guru', $user->id) }}" method="get">
+            <div class="input-group">
+                <div class="input-group-text" id="basic-addon1"><i class="bi bi-calendar-month"></i></div>
+                <input type="month" name="bulan" class="form-control" id="bulan"
+                    placeholder="Recipient's username" aria-label="Recipient's username"
+                    aria-describedby="button-addon2">
+                <button class="btn btn-outline-info" type="submit" id="button-addon2">
+                    Tampilkan
+                </button>
             </div>
-            @if ($bulans !== null)
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        @if ($bulans !== null)
                 <h2 class="mb-3">Rekapan Absensi Bulan {{ $bulanIni }} Tahun {{ $tahunIni }}</h2>
                 <div class="table-responsive">
                     <table id="myTable" class="table table-hover">
@@ -46,7 +43,8 @@
                             @forelse ($bulans as $bulan)
                                 <tr>
                                     <td>{{ $bulan->created_at->format('d-m-Y') }}</td>
-                                    <td> <span class="badge bg-primary">{{ $bulan->created_at->format('H:i:s') }}</span></td>
+                                    <td> <span class="badge bg-primary">{{ $bulan->created_at->format('H:i:s') }}</span>
+                                    </td>
                                     <td>
                                         @if ($bulan->status_absensi === '2')
                                             <span class="badge bg-info">Cuti</span>
@@ -54,10 +52,12 @@
                                             <span class="badge bg-info">Sakit</span>
                                         @elseif($bulan->status_absensi === '4')
                                             <span class="badge bg-info">Izin</span>
-                                            @elseif($bulan->status_absensi === '5')
+                                        @elseif($bulan->status_absensi === '5')
                                             <span class="badge bg-success">Hari Libur</span>
-                                            @elseif($bulan->status_absensi === '6')
+                                        @elseif($bulan->status_absensi === '6')
                                             <span class="badge bg-secondary">Tidak Ada Jadwal</span>
+                                        @elseif($bulan->status_absensi === '7')
+                                            <span class="badge badge-secondary">Pengajuan Izin Ditolak</span>
                                         @elseif($bulan->status_absensi === '1')
                                             @if ($bulan->created_at->format('H:i:s') < '08:00:00')
                                                 <span class="badge bg-success">Hadir</span>
@@ -77,6 +77,6 @@
                 </div>
 
             @endif
-        </div>
     </div>
+</div>
 @stop

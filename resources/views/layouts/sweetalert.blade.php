@@ -50,39 +50,6 @@
                 break;
         }
     @endif
-
-
-
-    // @if (Session::has('message'))
-    //     var type = "{{ Session::get('alert-type') }}";
-    //     switch (type) {
-    //         case 'success':
-    //             Toastify({
-    //                 text: "{{ Session::get('message') }}",
-    //                 duration: 3000,
-    //                 gravity: "top",
-    //                 position: "right",
-    //                 backgroundColor: "#4fbe87",
-    //             }).showToast()
-    //           break;
-    //         case 'error':
-    //             Toastify({
-    //                 text: "{{ Session::get('message') }}",
-    //                 duration: 3000,
-    //                 gravity: "top",
-    //                 position: "right",
-    //                 backgroundColor: "#c91a1a",
-    //             }).showToast()
-    //           break;
-    //         default:
-    //         Swal.fire({
-    //             title : 'Gagal',
-    //             html: "{{ Session::get('message') }}",
-    //             icon: 'error'
-    //     })
-    //             break;
-    //     }
-    // @endif
     @if ($errors->any())
         @php
             $message = '';

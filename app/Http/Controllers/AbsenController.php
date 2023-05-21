@@ -7,36 +7,48 @@ use Auth;
 use Carbon\Carbon;
 use App\Models\Absensi;
 use App\Models\Izin;
+use App\Models\SettingAbsen;
+use Storage;
+use DB;
+
 class AbsenController extends Controller
 {
     public function index()
     {
-        $data['absen'] = Absensi::where('user_id', Auth::user()->id)->whereDate('created_at', date('Y-m-d'))->pluck('absen_masuk')->count();
-        $data['pulang'] = Absensi::where('user_id', Auth::user()->id)->whereDate('created_at', date('Y-m-d'))
+        $id = Auth::user()->id;
+        $data['absen'] = Absensi::where('user_id', $id)->where('tgl_absensi', date('Y-m-d'))->first();
+        $data['pulang'] = Absensi::where('user_id', $id)->where('tgl_absensi', date('Y-m-d'))
             ->pluck('absen_pulang')
             ->first();
-        $data['izinHariIni'] = Izin::where('user_id', Auth::user()->id)->whereDate('tanggal_untuk_pengajuan', date('Y-m-d'))->count();
+        $data['hari'] = SettingAbsen::where('hari', date('l'))->where('user_id', $id)->first();
+        $data['izinHariIni'] = Izin::where('user_id', $id)->whereDate('tanggal_untuk_pengajuan', date('Y-m-d'))->first();
+        $data['lokasi'] = DB::table('setting_lokasi')->first();
         return view('absen.index')->with($data);
     }
 
-    public function absenMasuk(Request $request)
+    public function absen(Request $request)
     {
+        $lokasi = DB::table('setting_lokasi')->first();
+        $koordinat = explode(',', $lokasi->lokasi);
+        $latitude = $koordinat[0];
+        $longitude = $koordinat[1];
+        $radiusLokasi = $lokasi->radius; 
         $validate = $request->validate([
             'swafoto' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
         ]);
-        $data['absen_masuk'] = $request->file('swafoto');
-        $data['lokasi_absen_masuk'] = $request->lokasi;
-        $latitudeTempat = -6.88456;
-        $longitudeTempat = 107.57407;
-        $lokasiUser = explode(",", $data['lokasi_absen_masuk']);
+        
+        $foto = $request->file('swafoto');
+        $lokasiAbsen = $request->lokasi;
+        $lokasiUser = explode(",", $lokasiAbsen);
         $latitudeUser = $lokasiUser[0];
         $longitudeUser = $lokasiUser[1];
 
-        $jarak = $this->distance($latitudeTempat, $longitudeTempat, $latitudeUser, $longitudeUser);
+        $jarak = $this->distance($latitude, $longitude, $latitudeUser, $longitudeUser);
         $radius = round($jarak["meters"]);
-        $data['tgl_absensi'] = date('Y-m-d');
-        $data['user_id'] = Auth::user()->id;
-        if ($radius < 100) {
+        $tanggal = date('Y-m-d');
+        $id = Auth::user()->id;
+        $absen = Absensi::where('user_id', $id)->where('tgl_absensi', $tanggal)->first();
+        if ($lokasi->status == 1 && $radius > $radiusLokasi) {
             $notification = [
                 'alert-type' => 'error',
                 'message' => 'Anda Berada Diluar Radius Absen. Jarak Anda '. $radius . ' Meter Dari Sekolah',
@@ -46,69 +58,57 @@ class AbsenController extends Controller
                 ->with($notification);
         } else {
             if ($request->hasFile('swafoto')) {
-                $extension = $data['absen_masuk']->extension();
-                $filename = 'swafoto_' . 'masuk_' . $data['user_id'] . '_' . Carbon::now() . '.' . $extension;
-                $data['absen_masuk']->storeAs('public/swafoto_absensi_masuk/' . date('Y-m-d'), $filename);
-                $data['absen_masuk'] = $filename;
+                $extension = $foto->extension();
+                if($absen != null && $absen->absen_masuk != null){
+                    $filename = 'swafoto_' . 'pulang_' . $id . '_' . Carbon::now() . '.' . $extension;
+                    $foto->storeAs('public/swafoto_absensi_pulang/' . date('Y-m-d'), $filename);
+                }else{
+                    $filename = 'swafoto_' . 'masuk_' . $id . '_' . Carbon::now() . '.' . $extension;
+                    $foto->storeAs('public/swafoto_absensi_masuk/' . date('Y-m-d'), $filename);
+                }
+                $fotoDb = $filename;
             }
-            $data['status_absensi'] = 1;
-            Absensi::create($data);
-            $notification = [
-                'message' => 'Absen Masuk Berhasil',
-                'alert-type' => 'success',
+            $status = 1;
+            $izin = Izin::where('user_id', $id)->whereDate('tanggal_untuk_pengajuan', $tanggal)->first();
+            $created_at = Carbon::now();
+            $data = [
+                'absen_masuk' => $fotoDb,
+                'user_id' => $id,
+                'tgl_absensi' => $tanggal,
+                'status_absensi' => $status,
+                'created_at' => $created_at,
+                'lokasi_absen_masuk' => $lokasiAbsen
             ];
-            return redirect()
-                ->route('dashboard.user')
-                ->with($notification);
+
+            if($absen != null && $absen->status_absensi == 7 ){
+                Storage::delete('public/pengajuan/'.$izin->tipe.'/'.$izin->tanggal_untuk_pengajuan,$izin->dokumen);
+                $izin->delete();
+                $absen->update($data);
+            }else{
+                if ($izin != null && $izin->where('status_approval', 2 || $izin->where('status_approval', 2))) {
+                    $izin->delete();
+                }
+                if ($absen && $absen->absen_masuk != null) {
+                    $absen->update([
+                        'absen_pulang' => $fotoDb,
+                        'lokasi_absen_pulang' => $lokasiAbsen,
+                        'updated_at' => Carbon::now()
+                    ]);
+                } else {
+                      Absensi::insert($data);
+                } 
+            }
         }
+        $notification = [
+            'message' => 'Absen Berhasil',
+            'alert-type' => 'success',
+        ];
+        return redirect()
+            ->route('dashboard.user')
+            ->with($notification);
     }
 
-    public function absenPulang(Request $request)
-    {
-        $validate = $request->validate([
-            'swafoto' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
-        ]);
-        $absen = $request->file('swafoto');
-        $lokasi = $request->lokasi;
-        $user = Auth::user()->id;
-        $latitudeTempat = -6.91818;
-        $longitudeTempat = 107.61953;
-        $lokasiUser = explode(",", $lokasi);
-        $latitudeUser = $lokasiUser[0];
-        $longitudeUser = $lokasiUser[1];
-
-        $jarak = $this->distance($latitudeTempat, $longitudeTempat, $latitudeUser, $longitudeUser);
-        $radius = round($jarak['meters']);
-        if ($radius > 100) {
-            $notification = [
-                'message' => 'Anda Berada Diluar Radius Absen, Jarak Anda '. $radius . ' Meter Dari Sekolah',
-            ];
-            return redirect()
-                ->back()
-                ->with($notification);
-        } else {
-            if ($request->hasFile('swafoto')) {
-                $extension = $absen->extension();
-                $filename = 'swafoto_' . 'pulang_' . $user . '_' . Carbon::now() . '.' . $extension;
-                $absen->storeAs('public/swafoto_absensi_pulang/' . date('Y-m-d'), $filename);
-    
-                Absensi::where('user_id', $user)->update([
-                    'absen_pulang' => $filename,
-                    'lokasi_absen_pulang' => $lokasi,
-                    'updated_at' => Carbon::now(),
-                ]);
-            }
-            $notification = [
-                'message' => 'Absen Pulang Berhasil',
-                'alert-type' => 'success',
-            ];
-            return redirect()
-                ->route('dashboard.user')
-                ->with($notification);
-        }
-        
-    }
-    function distance($lat1, $lon1, $lat2, $lon2)
+    public function distance($lat1, $lon1, $lat2, $lon2)
     {
         $theta = $lon1 - $lon2;
         $miles = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));

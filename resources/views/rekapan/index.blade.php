@@ -64,8 +64,12 @@
                                             <span class="badge badge-info">Sakit</span>
                                             @elseif($item->status_absensi === "4")
                                             <span class="badge badge-info">Izin</span>
-                                            {{-- 5 === libur --}}
-                                            {{-- 6 === tidak ada jadwal --}}
+                                            @elseif($item->status_absensi === '5')
+                                            <span class="badge badge-success">Hari Libur</span>
+                                            @elseif($item->status_absensi === '6')
+                                            <span class="badge badge-secondary">Tidak Ada Jadwal</span>
+                                            @elseif($item->status_absensi === '7')
+                                            <span class="badge badge-secondary">Pengajuan Izin Ditolak</span>
                                             @elseif($item->status_absensi === "1")
                                                 @if ($item->created_at->format('H:i:s') < '08:00:00')
                                                 <span class="badge badge-success">Hadir</span>
