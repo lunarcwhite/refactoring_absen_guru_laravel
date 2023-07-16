@@ -24,6 +24,7 @@ class AbsenController extends Controller
     }
     public function index()
     {
+        // dd(date('l')) = "Sunday";
         $id = Auth::user()->id;
         $data['absen'] = Absensi::where('user_id', $id)->where('tanggal_absensi', date('Y-m-d'))->first();
         $data['pulang'] = Absensi::where('user_id', $id)->where('tanggal_absensi', date('Y-m-d'))

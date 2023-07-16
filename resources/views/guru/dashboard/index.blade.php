@@ -14,7 +14,7 @@
                 @endif
             </div>
             <div id="user-info">
-                <h2 id="user-name">{{Auth::user()->username}}</h2>
+                <h2 id="user-name">{{Auth::user()->nama}}</h2>
                 <span id="user-role">{{Auth::user()->email}}</span>
             </div>
         </div>
@@ -114,7 +114,7 @@
                                 </div>
                                 <div class="presencedetail">
                                     <h4 class="rekappresencetitle">Alfa</h4>
-                                    <span class="rekappresencedetail">0 Hari</span>
+                                    <span class="rekappresencedetail">{{$historiBulanIni->where('status_absensi', "0")->count()}} Hari</span>
                                 </div>
                             </div>
                         </div>
@@ -129,15 +129,15 @@
                                 </div>
                                 <div class="presencedetail">
                                     <h4 class="rekappresencetitle">Terlambat</h4>
-                                    @if($jam !== null)
-                                                                        @php
+                                    @php
                                         $terlambat = 0;
+                                    if($jam !== null){
                                         foreach ($historiBulanIni->where('status_absensi', "1") as $key => $value) {
                                             $value->created_at->format('H:i:s') > $jam->jam ? ($terlambat += 1) : ($terlambat += 0);
                                         }
+                                    }
                                     @endphp
                                     <span class="rekappresencedetail">{{ $terlambat }} Hari</span>
-                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -155,7 +155,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="tab-content" style="margin-bottom:100px;">
+            <div class="tab-content mt-1" style="margin-bottom:100px;">
                 <div class="tab-pane fade show active" id="home" role="tabpanel">
                     <div class="table-responsive">
                         <table class="table table-hover table-striped display nowrap">
@@ -196,7 +196,7 @@
                                         </td>
                                     </tr>
                                 @empty
-                                    <h1>Belum Ada Absen</h1>
+                                    <h2 class="text-center">Belum Ada Absen</h2>
                                 @endforelse
                             </tbody>
                         </table>

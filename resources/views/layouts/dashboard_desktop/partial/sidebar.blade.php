@@ -46,6 +46,19 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
+                <li class="sidebar-item has-sub">
+                    <a href="#" class="sidebar-link">
+                        <i class="bi bi-database"></i>
+                      <span>Master Data</span>
+                    </a>
+                    <ul class="submenu">
+                        <li class="submenu-item">
+                            <a href="{{route('dashboard.kelolaGuru.index')}}" class="submenu-link">
+                                Guru
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
                 <li class="sidebar-title">Absensi</li>
                 <li class="sidebar-item has-sub">

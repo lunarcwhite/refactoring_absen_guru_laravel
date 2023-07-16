@@ -61,6 +61,24 @@
     <script src="{{ asset('assets_desktop/compiled/js/app.js') }}"></script>
     @include('layouts.scripts.sweetalert')
     @include('layouts.scripts.dataTable')
+    <script>
+        function clearInput(formId, label = "", action = "", password = false) {
+            if(password === true){
+                let password = $("#password_akun");
+                password.empty();
+            }
+            document.getElementById(formId).reset();
+            $(".file").val("");
+            $(`#labelModal`).text(label);
+            $(`#btn-submit`).text('Simpan');
+            document.getElementById(formId).action =
+                `{{ url('${action}') }}`;
+            $("#update").empty();
+            $('.image-preview').empty();
+            $(".image-show").empty();
+            $(".selected").removeAttr('selected');
+        }
+    </script>
     @stack('js')
     
 

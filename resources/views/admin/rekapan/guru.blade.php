@@ -18,7 +18,7 @@ Daftar Guru
             <table class="table table-hover" id="myTable">
                 <thead>
                     <th>No</th>
-                    <th>Username</th>
+                    <th>Nama Guru</th>
                     <th>Email</th>
                     <th>No HP</th>
                     <TH>Aksi</TH>
@@ -27,7 +27,7 @@ Daftar Guru
                     @foreach ($users as $no => $user)
                         <tr>
                             <td>{{$no+1}}</td>
-                            <td>{{$user->username}}</td>
+                            <td>{{$user->nama}}</td>
                             <td>{{$user->email}}</td>
                             <td>{{$user->no_hp}}</td>
                             <td><a href="{{route('dashboard.rekapan.show.guru',$user->id)}}" class="badge bg-info">Lihat</a>

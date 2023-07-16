@@ -17,9 +17,12 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
+                        @if (date('l') === "Sunday" || date('l') === "Saturday")
+                        <h2>Hari Minggu Absensi Libur</h2>
+                        @else
                         @if ($hari !== null && $hari->status == 0)
                             <h2>@php echo 'Tanggal ' . date('Y-m-d'); @endphp</h2>
-                            <h3>Hari Senin Anda Tidak Memiliki Jadwal Absen </h3>
+                            <h3>Hari {{$hari}} Anda Tidak Memiliki Jadwal Absen </h3>
                         @else
                             @if ($absen != null && $absen->status_absensi == 5)
                                 <h2>@php echo 'Tanggal ' . date('Y-m-d'); @endphp</h2>
@@ -91,6 +94,7 @@
                                     @endif
                                 @endif
                             @endif
+                        @endif
                         @endif
                     </div>
                 </div>

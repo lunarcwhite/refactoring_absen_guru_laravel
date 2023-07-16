@@ -14,9 +14,9 @@ class SettingAbsensSeeder extends Seeder
     public function run(): void
     {
         $users = DB::table('users')->where('role_id', 2)->get();
-        $hari = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        $hari = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
         foreach ($users as $key => $user) {
-            for ($i=1; $i <= 6; $i++) { 
+            for ($i=1; $i <= 4; $i++) { 
                 DB::table('setting_absens')->insert([
                     'status' => 1,
                     'hari' => $hari[$i],

@@ -30,7 +30,7 @@
                                 <td>{{ $no + 1 }}</td>
                                 <td>{{ $disetujui->tanggal_untuk_pengajuan }}</td>
                                 <td>{{ $disetujui->tipe }}</td>
-                                <td>Nama Guru</td>
+                                <td>{{ $izin->user->nama }}</td>
                                 <td><span class="badge bg-success">Disetujui</span></td>
                                 <td><button onclick="openModal('modal-lihat-pengajuan',{{ $disetujui->id }})" type="button"
                                         class="badge bg-info">Lihat</button>

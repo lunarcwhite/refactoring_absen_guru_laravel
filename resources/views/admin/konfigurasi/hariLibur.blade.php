@@ -19,7 +19,7 @@ Hari Libur
           </button>
         <hr/>
         <div class="table-responsive">
-            <table class="table table-hover">
+            <table class="table table-hover" id="myTable">
                     <thead>
                         <th>NO</th>
                         <th>Tanggal</th>

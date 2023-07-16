@@ -14,6 +14,7 @@ use App\Http\Controllers\Guru\PengajuanIzinController;
 use App\Http\Controllers\Admin\RekapanPresensiController;
 use App\Http\Controllers\Admin\KelolaIzinController;
 use App\Http\Controllers\Admin\KonfigurasiController;
+use App\Http\Controllers\Admin\KelolaGuruController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,7 +58,6 @@ Route::middleware('revalidate')->group(function () {
                     Route::get('', 'index')->name('index');
                 });
 
-
                 Route::middleware('guru')->group(function () {
                     Route::controller(AbsenController::class)->group(function () {
                         Route::name('absen.')->group(function () {
@@ -86,8 +86,13 @@ Route::middleware('revalidate')->group(function () {
                     });
                 });
 
-
                 Route::middleware('admin')->group(function () {
+                    Route::resource('kelolaGuru', KelolaGuruController::class)->except('create','show', 'destroy');
+                    Route::controller(KelolaGuruController::class)->group(function () {
+                        Route::name('kelolaGuru.')->group(function () {
+                            Route::post('/kelolaGuru/import', 'import')->name('import');
+                        });
+                    });
                     Route::controller(RekapanPresensiController::class)->group(function () {
                         Route::name('rekapan.')->group(function () {
                             Route::get('/rekapan/hariIni', 'hariIni')->name('hariIni');
@@ -120,9 +125,6 @@ Route::middleware('revalidate')->group(function () {
                         });
                     });
                 });
-
-
-
             });
         });
     });

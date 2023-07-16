@@ -6,10 +6,15 @@
     <div class="section mt-2">
         <div class="card mb-3">
             <div class="card-body text-center">
+                @if (auth()->user()->photo === null)
                 <img src="{{asset('assets_mobile/img/sample/avatar/avatar1.jpg')}}" alt="Christina Mason" class="img-fluid rounded-circle mb-2" width="128"
                     height="128" />
-                <h5 class="card-title mb-0">{{ auth()->user()->username }}</h5>
-                <div class="text-muted mb-2">{{ auth()->user()->email }}</div>
+                @else
+                <img src="{{asset('assets_mobile/img/sample/avatar/avatar1.jpg')}}" alt="Christina Mason" class="img-fluid rounded-circle mb-2" width="128"
+                height="128" />
+                @endif
+                <h5 class="card-title mb-0">{{ auth()->user()->nama }}</h5>
+                <div class="text-muted mb-2">{{ auth()->user()->nuptk }}</div>
             </div>
             {{-- <div class="card-body">
                 <h5 class="h6 card-title">Skills</h5>

@@ -18,14 +18,14 @@ Daftar Guru
             <table class="table table-hover" id="myTable">
                 <thead>
                     <th>No</th>
-                    <th>Username</th>
+                    <th>Nama Guru</th>
                     <TH>Aksi</TH>
                 </thead>
                 <tbody>
                     @foreach ($users as $no => $user)
                         <tr>
                             <td>{{$no+1}}</td>
-                            <td>{{$user->username}}</td>
+                            <td>{{$user->nama}}</td>
                             <td><a href="{{route('dashboard.setting.absen.setting',$user->id)}}" class="badge bg-info">Atur</a>
                             </td>
                         </tr>

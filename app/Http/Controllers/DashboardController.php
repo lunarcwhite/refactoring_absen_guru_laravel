@@ -30,7 +30,7 @@ class DashboardController extends Controller
         $data['historiBulanIni'] = Absensi::where('user_id', $id)->whereMonth('tanggal_absensi', $data['bulanIni'])->whereYear('tanggal_absensi', $data['tahunIni'])->get();
         $data['izinBulanIni'] = Izin::where('user_id', $id)->where('status_approval', 1)->whereMonth('tanggal_untuk_pengajuan', $data['bulanIni'])->whereYear('tanggal_untuk_pengajuan', $data['tahunIni'])->get();
             return view('guru.dashboard.index')->with($data);
-        }elseif($role_id != 2){
+        }elseif($role_id == 1 || $role_id == 3){
             $data['absenHariIni'] = $data['absenHariIni'] = Absensi::where('tanggal_absensi', $data['hariIni']);
             $user = User::where('role_id', 2)->get();
             $data['izins'] = Izin::where('status_approval', 2);

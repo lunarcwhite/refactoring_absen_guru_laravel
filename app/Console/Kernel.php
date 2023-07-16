@@ -23,7 +23,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->everyMinute();
         $schedule->command('minggu:libur')->sundays('00:01');
         $schedule->command('delete:pending')->monthly();
-        $schedule->command('submit:absen')->days([1,2,3,4,5,6])->runInBackground()->at('21:00');
+        $schedule->command('submit:absen')->days([1,2,3,4,5])->runInBackground()->at('21:00');
     }
 
     /**
