@@ -40,7 +40,7 @@ class User extends Authenticatable
 
     public function role()
     {
-        return $this->hasOne(Roles::class, 'role_id', 'id');
+        return $this->belongsTo(Roles::class, 'role_id');
     }
     public function absensi()
     {
@@ -49,5 +49,9 @@ class User extends Authenticatable
     public function izin()
     {
         return $this->hasMany(Izin::class, 'user_id', 'id');
+    }
+    public function jadwal_absen()
+    {
+        return $this->hasMany(SettingAbsen::class, 'user_id', 'id');
     }
 }

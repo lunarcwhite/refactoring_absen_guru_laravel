@@ -8,18 +8,19 @@ var CACHE_NAME = 'cache-version-1';
 
 // Files required to make this app work offline
 var REQUIRED_FILES = [
+  '/public/index.php',
   '/',
   'https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap',
   'https://unpkg.com/ionicons@5.0.0/dist/ionicons.js',
-  'assets/js/lib/jquery-3.4.1.min.js',
-  'assets/js/lib/popper.min.js',
-  'assets/js/lib/bootstrap.min.js',
-  'assets/js/plugins/owl-carousel/owl.carousel.min.js',
-  'assets/js/base.js',
-  'assets/css/inc/owl-carousel/owl.carousel.min.css',
-  'assets/css/inc/owl-carousel/owl.theme.default.css',
-  'assets/css/inc/bootstrap/bootstrap.min.css',
-  'assets/css/style.css'
+  '<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>',
+  'assets_mobile/js/lib/popper.min.js',
+  'assets_mobile/js/lib/bootstrap.min.js',
+  'assets_mobile/js/plugins/owl-carousel/owl.carousel.min.js',
+  'assets_mobile/js/base.js',
+  'assets_mobile/css/inc/owl-carousel/owl.carousel.min.css',
+  'assets_mobile/css/inc/owl-carousel/owl.theme.default.css',
+  'assets_mobile/css/inc/bootstrap/bootstrap.min.css',
+  'assets_mobile/css/style.css'
 ];
 
 self.addEventListener('install', function(event) {

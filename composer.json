@@ -13,12 +13,13 @@
         "doctrine/dbal": "^3.0"
     },
     "require-dev": {
-        "spatie/laravel-ignition": "^2.0",
         "fakerphp/faker": "^1.9.1",
+        "jn-jairo/laravel-ngrok": "^3.0",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.10",
-        "phpunit/phpunit": "^9.5.10"
+        "phpunit/phpunit": "^9.5.10",
+        "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
         "psr-4": {

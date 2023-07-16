@@ -15,10 +15,10 @@ class KepalaSekolah
      */
     public function handle(Request $request, Closure $next)
     {
-            if(auth()->user()->role_id == 3 ){
-                return $next($request);
+            if(auth()->user()->role_id != 3 ){
+                return redirect()->route('landing');
             }
-            return redirect()->back();
+            return $next($request);
         
     }
 }
