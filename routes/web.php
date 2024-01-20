@@ -87,7 +87,7 @@ Route::middleware('revalidate')->group(function () {
                 });
 
                 Route::middleware('admin')->group(function () {
-                    Route::resource('kelolaGuru', KelolaGuruController::class)->except('create','show', 'destroy');
+                    Route::resource('kelolaGuru', KelolaGuruController::class)->except('create','show');
                     Route::controller(KelolaGuruController::class)->group(function () {
                         Route::name('kelolaGuru.')->group(function () {
                             Route::post('/kelolaGuru/import', 'import')->name('import');

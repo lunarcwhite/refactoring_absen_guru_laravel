@@ -42,7 +42,7 @@ class PengajuanIzinController extends Controller
                 } else {
                     if ($request->hasFile('dokumen')) {
                         $extension = $dokumen->extension();
-                        $filename = 'dokumen_' . 'pengajuan_' . $request->tipe . '_' . $id . '_' . Carbon::now() . '.' . $extension;
+                        $filename = 'dokumen_' . 'pengajuan_' . $request->tipe . '_' . $id . '_' . time() . '.' . $extension;
                         $dokumen->storeAs('public/pengajuan/' . $request->tipe . '/' . $request->tanggal_pengajuan, $filename);
                         $dokumen = $filename;
                     }

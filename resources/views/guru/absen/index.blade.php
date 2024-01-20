@@ -17,7 +17,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        @if (date('l') === "Sunday" || date('l') === "Saturday")
+                        @if (date('l') === "Sunday")
                         <h2>Hari Minggu Absensi Libur</h2>
                         @else
                         @if ($hari !== null && $hari->status == 0)
@@ -86,7 +86,7 @@
                                                 </button>
                                             @else
                                                 <button class="btn btn-primary mt-2 btn-lg btn-block" type="button"
-                                                    onclick="formConfirmation('Kamu akan melakukan absen pulang!')">Absen
+                                                    onclick="formConfirmation('Kamu akan melakukan absen masuk!')">Absen
                                                     Masuk
                                                 </button>
                                             @endif

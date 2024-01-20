@@ -51,6 +51,12 @@ class KonfigurasiController extends Controller
     }
     public function hariLiburStore(Request $request)
     {
+        
+        $request->validate([
+                'keterangan' => 'required',
+                'tanggal' => 'required'
+            ]);
+
         try {
             $users = User::where('role_id', 2)->get();
             foreach ($users as $key => $user) {

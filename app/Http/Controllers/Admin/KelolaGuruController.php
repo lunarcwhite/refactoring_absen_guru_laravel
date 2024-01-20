@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Excel;
 use App\Imports\ImportGuru;
+use DB;
 
 class KelolaGuruController extends Controller
 {
@@ -54,6 +55,16 @@ class KelolaGuruController extends Controller
         $input['password'] = bcrypt($password);
         try {
             User::create($input);
+            $user = User::where('nuptk', $request->nuptk)->first();
+        	$hari = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        for ($i=1; $i <= 6; $i++) { 
+                DB::table('setting_absens')->insert([
+                    'status' => 1,
+                    'hari' => $hari[$i],
+                    'jam' => '07:00:00',
+                    'user_id' => $user->id
+                ]);
+            }
         } catch (\Throwable $th) {
             $this->error($th->getMessage());
         }
@@ -104,9 +115,14 @@ class KelolaGuruController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(String $user)
     {
-        //
+        try {
+            User::where('id', $user)->delete();
+        } catch (\Throwable $th) {
+            $this->error($th->getMessage());
+        }
+        return redirect()->back()->with('success', 'Berhasil Menghapus Data Guru!');
     }
 
     function import(Request $request)
@@ -118,7 +134,7 @@ class KelolaGuruController extends Controller
             Excel::import(new ImportGuru, $request->file('import_guru'));
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
-            return redirect()->back()->withErrors($failures);
+            $this->error($failures);
         }
         return redirect()->back()->with('success','Import Guru Berhasil');
     }

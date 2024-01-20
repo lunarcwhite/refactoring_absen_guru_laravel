@@ -46,10 +46,17 @@ Daftar Guru
                             <td>{{$user->email}}</td>
                             <td>{{$user->no_hp}}</td>
                             <td>
-                                <button type="button" class="btn btn-sm btn-warning"
+                            <form action="{{ route('dashboard.kelolaGuru.destroy', $user->id) }}"
+                                            id="" method="post">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="button" class="btn btn-sm btn-warning"
                                 onclick="editGuru('{{ $user->id }}','#modalFormGuru')">
                                 Edit
                             </button>
+                                            <button type="button" class="btn btn-sm btn-danger"
+                                                onclick="formConfirmation('Hapus Data {{ $user->nama }}')">Hapus</button>
+                                        </form>
                             </td>
                         </tr>
                     @endforeach

@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Illuminate\Validation\Rule;
+use DB;
 
 class ImportGuru implements WithHeadingRow, ToCollection, SkipsOnError, SkipsEmptyRows, WithValidation
 {
@@ -28,7 +29,7 @@ class ImportGuru implements WithHeadingRow, ToCollection, SkipsOnError, SkipsEmp
         foreach ($rows as $row) {
             $password = bcrypt('gbghfd65#2w4512345sdghgh^$^');
             User::create([
-                'username' => $row['nuptk'],
+                'username' => $row['no_hp'],
                 'password' => $password,
                 'email' => $row['email'],
                 'role_id' => 2,
@@ -36,13 +37,16 @@ class ImportGuru implements WithHeadingRow, ToCollection, SkipsOnError, SkipsEmp
                 'no_hp' => $row['no_hp'],
                 'nuptk' => $row['nuptk'],
             ]);
-            // Siswa::create([
-            //     'nama_siswa' => $row['nama_siswa'],
-            //     'nisn' => $row['nisn'],
-            //     'jurusan_id' => $jurusan->id,
-            //     'tahun_ajaran_id' => $tahunAjaran->id,
-            //     'user_id' => $id
-            // ]);
+                      $user = User::where('nuptk', $row['nuptk'])->first();
+            $hari = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        for ($i=1; $i <= 6; $i++) { 
+                DB::table('setting_absens')->insert([
+                    'status' => 1,
+                    'hari' => $hari[$i],
+                    'jam' => '07:00:00',
+                    'user_id' => $user->id
+                ]);
+            }
         }
     }
 

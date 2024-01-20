@@ -30,7 +30,7 @@
                                 <td>{{ $no + 1 }}</td>
                                 <td>{{ $disetujui->tanggal_untuk_pengajuan }}</td>
                                 <td>{{ $disetujui->tipe }}</td>
-                                <td>{{ $izin->user->nama }}</td>
+                                <td>{{ $disetujui->user->nama }}</td>
                                 <td><span class="badge bg-success">Disetujui</span></td>
                                 <td><button onclick="openModal('modal-lihat-pengajuan',{{ $disetujui->id }})" type="button"
                                         class="badge bg-info">Lihat</button>
@@ -54,7 +54,7 @@
                     @method('patch')
                     @include('admin.izin.modal_body')
                     <div class="modal-footer" id="modal-button">
-                        <button type="button" onclick="konfirmasi('0')" class="btn btn-danger">Tolak Setujui</button>
+                        <button type="button" onclick="konfirmasi('0')" class="btn btn-danger">Batalkan Persetujuan</button>
                     </div>
                 </form>
             </div>

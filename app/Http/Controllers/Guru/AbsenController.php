@@ -67,10 +67,10 @@ class AbsenController extends Controller
                 if ($request->hasFile('swafoto')) {
                     $extension = $foto->extension();
                     if($absen != null && $absen->photo_absen_masuk != null){
-                        $filename = 'swafoto_' . 'pulang_' . $id . '_' . Carbon::now() . '.' . $extension;
+                        $filename = 'swafoto_' . 'pulang_' . $id . '_' . time() . '.' . $extension;
                         $foto->storeAs('public/swafoto_absensi_pulang/' . date('Y-m-d'), $filename);
                     }else{
-                        $filename = 'swafoto_' . 'masuk_' . $id . '_' . Carbon::now() . '.' . $extension;
+                        $filename = 'swafoto_' . 'masuk_' . $id . '_' . time() . '.' . $extension;
                         $foto->storeAs('public/swafoto_absensi_masuk/' . date('Y-m-d'), $filename);
                     }
                     $fotoDb = $filename;
