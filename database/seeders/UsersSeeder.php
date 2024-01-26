@@ -23,6 +23,7 @@ class UsersSeeder extends Seeder
             ],
             [
                 'username' => 'ks',
+                'nama' => 'Agus Shalim S.T',
                 'email' => 'ks@mail.com',
                 'password' => bcrypt('gbghfd65#2w4512345sdghgh^$^'),
                 'role_id' => 3
