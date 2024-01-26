@@ -28,7 +28,7 @@ use App\Http\Controllers\Admin\KelolaGuruController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome')->name('landing');
 });
 
 Route::middleware('revalidate')->group(function () {
@@ -58,7 +58,7 @@ Route::middleware('revalidate')->group(function () {
                     Route::get('', 'index')->name('index');
                 });
 
-                Route::middleware('guru')->group(function () {
+                Route::middleware('guru', 'ks')->group(function () {
                     Route::controller(AbsenController::class)->group(function () {
                         Route::name('absen.')->group(function () {
                             Route::get('/absen', 'index')->name('index');
@@ -86,7 +86,7 @@ Route::middleware('revalidate')->group(function () {
                     });
                 });
 
-                Route::middleware('admin')->group(function () {
+                Route::middleware('admin', 'ks')->group(function () {
                     Route::resource('kelolaGuru', KelolaGuruController::class)->except('create','show');
                     Route::controller(KelolaGuruController::class)->group(function () {
                         Route::name('kelolaGuru.')->group(function () {
@@ -99,6 +99,8 @@ Route::middleware('revalidate')->group(function () {
                             Route::get('/rekapan/guru', 'guru')->name('guru');
                             Route::get('/rekapan/guru/{id}', 'showGuru')->name('show.guru');
                             Route::get('/rekapan/tanggal', 'tanggal')->name('tanggal');
+                            Route::delete('/rekapan/{id}', 'deleteAbsen')->name('deleteAbsen');
+                            Route::post('/rekapan/tambah', 'tambahAbsen')->name('tambahAbsen');
                         });
                         Route::controller(KelolaIzinController::class)->group(function () {
                             Route::name('pengajuan.')->group(function () {
@@ -120,6 +122,8 @@ Route::middleware('revalidate')->group(function () {
                                     Route::get('/absen', 'jamHari')->name('absen');
                                     Route::get('/absen/{id}', 'jamHariSetting')->name('absen.setting');
                                     Route::put('/absen/{id}/update', 'jamHariSettingUpdate')->name('absen.update');
+                                    Route::get('/kepalaSekolah', 'kepalaSekolah')->name('kepalaSekolah');
+                                    Route::patch('/kepalaSekolah/{id}', 'kepalaSekolahUpdate')->name('kepalaSekolahUpdate');
                                 });
                             });
                         });

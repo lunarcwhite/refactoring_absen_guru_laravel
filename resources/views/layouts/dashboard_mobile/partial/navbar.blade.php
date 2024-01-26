@@ -10,7 +10,7 @@
             <div class="col">
                 <ion-icon name="calendar-outline" role="img" class="md hydrated" aria-label="calendar outline">
                 </ion-icon>
-                <strong>Rekapan</strong>
+                <strong>Riwayat</strong>
             </div>
         </a>
         <a href="{{ route('dashboard.absen.index') }}" class="item">

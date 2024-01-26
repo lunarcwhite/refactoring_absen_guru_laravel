@@ -12,21 +12,12 @@ class RekapanPresensiController extends Controller
 {
     public function guru(Request $request)
     {
-        $data['users'] = User::where('role_id', 2)->get();
-        if($request->filled('bulan')){
-            $tmp = explode("-", $request->bulan);
-            $namaBulan = ["", "Januari", 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-            $data['bulanIni'] = $namaBulan[$tmp[1] * 1];
-            $data['tahunIni'] = $tmp[0];
-            $data['bulans'] = Absensi::whereYear('tanggal_absensi', $tmp[0])->whereMonth('tanggal_absensi', $tmp[1])->where('user_id', $request->id)->get();
-        }else{
-            $data['bulans'] = null;
-        }
+        $data['users'] = User::whereNot('role_id', 1)->orderBy('nama', 'asc')->get();
         return view('admin.rekapan.guru')->with($data);
     }
     public function hariIni()
     {
-        $user = User::where('role_id', 2)->get();
+        $user = User::whereNot('role_id', 1)->orderBy('nama', 'asc')->get();
         $absens = array();
         foreach ($user as $key => $value) {
             $absen = Absensi::where('user_id', $value->id)->where('tanggal_absensi', date('Y-m-d'))->first();
@@ -65,16 +56,8 @@ class RekapanPresensiController extends Controller
     }
     public function showGuru($id, Request $request)
     {
-        if($request->filled('bulan')){
-            $tmp = explode("-", $request->bulan);
-            $namaBulan = ["", "Januari", 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-            $data['bulanIni'] = $namaBulan[$tmp[1] * 1];
-            $data['tahunIni'] = $tmp[0];
-            $data['bulans'] = Absensi::whereYear('tanggal_absensi', $tmp[0])->whereMonth('tanggal_absensi', $tmp[1])->where('user_id', $id)->get();
-        }else{
-            $data['bulans'] = null;
-        }
         $data['user'] = User::where('id', $id)->first();
+        $data['absens'] = Absensi::where('user_id', $id)->orderBy('tanggal_absensi','asc')->get();
         return view('admin.rekapan.show')->with($data);
     }
     public function tanggal(Request $request)
@@ -90,5 +73,31 @@ class RekapanPresensiController extends Controller
             $data['absens'] = null;
         }
         return view('admin.rekapan.tanggal')->with($data);
+    }
+
+    public function deleteAbsen($id)
+    {
+        try {
+            Absensi::where('id', $id)->delete();
+        } catch (\Throwable $th) {
+            return redirect()->back()->withErrors($th->getMessage());
+        }
+        return redirect()->back()->with('success', 'Absensi berhasil dihapus!');
+    }
+
+    public function tambahAbsen(Request $request)
+    {
+        $request->validate([
+            'tanggal_absensi' => 'required|unique:absensis,tanggal_absensi',
+            'status_absensi' => 'required'
+        ]);
+
+        try {
+            $absen = new Absensi;
+            $absen->create($request->input());
+        } catch (\Throwable $th) {
+            return redirect()->back()->withErrors($th->getMessage());
+        }
+        return redirect()->back()->with('success', 'Absen berhasil ditambahkan!');
     }
 }

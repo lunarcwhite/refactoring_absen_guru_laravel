@@ -1,6 +1,6 @@
 @extends('layouts.dashboard_mobile.master')
 @section('pageTitle')
-    Histori Presensi
+    Histori Absensi
 @stop
 @section('content')
     <div class="section mt-3 mb-3">
@@ -32,7 +32,7 @@
         <div class="card">
             @if ($bulans)
             <div class="card-header">
-                <h2>Rekapan Absensi Bulan {{ $bulanIni }} Tahun {{ $tahunIni }}</h2>
+                <h2>Riwayat Absensi Bulan {{ $bulanIni }} Tahun {{ $tahunIni }}</h2>
             </div>
             <div class="card-body">
                     <div class="table-responsive">

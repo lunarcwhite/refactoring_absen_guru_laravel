@@ -114,4 +114,38 @@ class KonfigurasiController extends Controller
         }
         return redirect()->back()->with('success', 'Lokasi Absen Berhasil Diperbarui');
     }
+
+    public function kepalaSekolah()
+    {
+        $data['ks'] = User::where('role_id', 3)->first();
+        $data['users'] = User::where('role_id', 2)->orderBy('nama', 'asc')->get();
+        return view('admin.konfigurasi.kepalaSekolah')->with($data);
+    }
+
+    public function kepalaSekolahUpdate(Request $request, $id)
+    {
+        $user = new User;
+        $status = $request->status;
+        if($status == "turun"){
+            try {
+                $user->where('id', $id)->update([
+                    'role_id' => 2
+                ]);
+            } catch (\Throwable $th) {
+                return redirect()->back()->withErrors($th->getMessage());
+            } 
+        }else{
+            try {
+                $user->where('role_id', 3)->update([
+                    'role_id' => 2
+                ]);
+                $user->where('id', $id)->update([
+                    'role_id' => 3
+                ]);
+            } catch (\Throwable $th) {
+                return redirect()->back()->withErrors($th->getMessage());
+            }
+        }
+        return redirect()->back()->with('success', 'Aksi Berhasil!');
+    }
 }

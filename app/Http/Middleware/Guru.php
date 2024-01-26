@@ -16,10 +16,10 @@ class Guru
      */
     public function handle(Request $request, Closure $next)
     {
-            if(auth()->user()->role_id != 2){
-                return redirect()->route('landing');
+            if(auth()->user()->role_id == 2 || auth()->user()->role_id == 3){
+                return $next($request);
             }
-            return $next($request);
+            return redirect()->back();
         
     }
 }

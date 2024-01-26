@@ -3,7 +3,8 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <a href="index.html"><img src="{{asset('assets_desktop/compiled/svg/logo.svg')}}" alt="Logo" srcset="" /></a>
+                    <a href="{{ route('dashboard.index') }}"><img
+                            src="{{ asset('assets_desktop/compiled/svg/logo.svg') }}" alt="Logo" srcset="" /></a>
                 </div>
                 <div class="theme-toggle d-flex gap-2 align-items-center mt-2">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -41,101 +42,131 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-item">
-                    <a href="{{route('dashboard.index')}}" class="sidebar-link">
+                    <a href="{{ route('dashboard.index') }}" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
+                @can('admin')
                 <li class="sidebar-item has-sub">
                     <a href="#" class="sidebar-link">
                         <i class="bi bi-database"></i>
-                      <span>Master Data</span>
+                        <span>Master Data</span>
                     </a>
                     <ul class="submenu">
                         <li class="submenu-item">
-                            <a href="{{route('dashboard.kelolaGuru.index')}}" class="submenu-link">
+                            <a href="{{ route('dashboard.kelolaGuru.index') }}" class="submenu-link">
                                 Guru
                             </a>
                         </li>
                     </ul>
                 </li>
-
+                @endcan
                 <li class="sidebar-title">Absensi</li>
                 <li class="sidebar-item has-sub">
                     <a href="#" class="sidebar-link">
                         <i class="bi bi-calendar-check"></i>
-                      <span>Absensi</span>
+                        <span>Absensi</span>
                     </a>
-    
+
                     <ul class="submenu">
+                        @can('admin')
                         <li class="submenu-item">
-                            <a href="{{route('dashboard.rekapan.hariIni')}}" class="submenu-link">
+                            <a href="{{ route('dashboard.rekapan.guru') }}" class="submenu-link">
+                                Kelola Absen
+                            </a>
+                        </li>
+                        @endcan
+                        @can('ks')
+                        <li class="submenu-item">
+                            <a href="{{ route('dashboard.absen.index') }}" class="submenu-link">
+                                Absen
+                            </a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="{{ route('dashboard.izin.index') }}" class="submenu-link">
+                                Izin
+                            </a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="{{ route('dashboard.histori.index') }}" class="submenu-link">
+                                Riwayat Absensi
+                            </a>
+                        </li>
+                        @endcan
+                        <li class="submenu-item">
+                            <a href="{{ route('dashboard.rekapan.hariIni') }}" class="submenu-link">
                                 Absen Hari Ini
                             </a>
                         </li>
-                        <li class="submenu-item">
-                            <a href="{{route('dashboard.rekapan.guru')}}" class="submenu-link">
-                                Rekapan Per Guru
-                            </a>
-                        </li>
-                        <li class="submenu-item">
+                        {{-- <li class="submenu-item">
                             <a href="{{route('dashboard.rekapan.tanggal')}}" class="submenu-link">
                                Rekapan Per Tanggal
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </li>
                 @can('admin')
-                <li class="sidebar-item has-sub">
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-collection"></i>
-                      <span>Pengajuan Izin</span>
-                    </a>
-    
-                    <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="{{route('dashboard.pengajuan.pending')}}" class="submenu-link">
-                                Pending
-                            </a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="{{route('dashboard.pengajuan.disetujui')}}" class="submenu-link">
-                                Disetujui
-                            </a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="{{route('dashboard.pengajuan.ditolak')}}" class="submenu-link">
-                                Ditolak
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                    <li class="sidebar-item has-sub">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-collection"></i>
+                            <span>Pengajuan Izin</span>
+                        </a>
+
+                        <ul class="submenu">
+                            <li class="submenu-item">
+                                <a href="{{ route('dashboard.pengajuan.pending') }}" class="submenu-link">
+                                    Pending
+                                </a>
+                            </li>
+                            <li class="submenu-item">
+                                <a href="{{ route('dashboard.pengajuan.disetujui') }}" class="submenu-link">
+                                    Disetujui
+                                </a>
+                            </li>
+                            <li class="submenu-item">
+                                <a href="{{ route('dashboard.pengajuan.ditolak') }}" class="submenu-link">
+                                    Ditolak
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 @endcan
                 <li class="sidebar-title">Konfigurasi</li>
                 <li class="sidebar-item has-sub">
                     <a href="#" class="sidebar-link">
                         <i class="bi bi-gear"></i>
-                      <span>Absen</span>
+                        <span>Absen</span>
                     </a>
-    
+                    
                     <ul class="submenu">
+                        @can('admin')
+                            <li class="submenu-item">
+                                <a href="{{ route('dashboard.setting.absen') }}" class="submenu-link">
+                                    Jam & Hari Absen
+                                </a>
+                            </li>
+                            <li class="submenu-item">
+                                <a href="{{ route('dashboard.setting.lokasi') }}" class="submenu-link">
+                                    Lokasi Absen
+                                </a>
+                            </li>
+                        @endcan
                         <li class="submenu-item">
-                            <a href="{{route('dashboard.setting.absen')}}" class="submenu-link">
-                                Jam & Hari Absen
-                            </a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="{{route('dashboard.setting.lokasi')}}" class="submenu-link">
-                                Lokasi Absen
-                            </a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="{{route('dashboard.setting.hariLibur')}}" class="submenu-link">
+                            <a href="{{ route('dashboard.setting.hariLibur') }}" class="submenu-link">
                                 Hari Libur
                             </a>
                         </li>
                     </ul>
                 </li>
+                @can('admin')
+                <li class="sidebar-item">
+                    <a href="{{ route('dashboard.setting.kepalaSekolah') }}" class="sidebar-link">
+                        <i class="bi bi-person"></i>
+                        <span>Kepala Sekolah</span>
+                    </a>
+                </li>
+                @endcan
             </ul>
         </div>
     </div>
